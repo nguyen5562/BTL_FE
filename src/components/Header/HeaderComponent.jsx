@@ -16,11 +16,12 @@ const HeaderComponent = () => {
 
                 <Col span={12}>
                     <ButtonInputSearch 
-                        size="large" 
-                        placeholder="Tìm sản phẩm" 
-                        textbutton="Tìm kiếm" 
-                        backgroundcolorbutton="rgb(13,92,182)"
-                        colorbutton='#000'
+                        size = "large" 
+                        placeholder = "Tìm sản phẩm" 
+                        textbutton = "Tìm kiếm"
+                        backgroundcolorinput = '#fff'
+                        backgroundcolorbutton = 'rgb(13, 92, 182)'
+                        colorbutton = '#000'
                     />
                 </Col>
 
