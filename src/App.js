@@ -1,10 +1,26 @@
-import React from "react";
+import React, { Fragment } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { routes } from "./routes";
+import DefaultComponent from "./components/Default/DefaultComponent";
 
 function App() {
   return (
     <div>
-      
-    </div>
+      <Router>
+        <Routes>
+          {routes.map((route) => {
+            const Layout = route.isShowHeader ? DefaultComponent : Fragment
+            return (
+              <Route key={route.path} path={route.path}  element={
+                <Layout>
+                  <route.page />
+                </Layout>
+              } />
+            )
+          })}
+        </Routes>
+      </Router>
+    </div> 
   );
 }
 
