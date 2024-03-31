@@ -47,7 +47,7 @@ const NavbarComponent = () => {
                 {renderContent('text', ['Tu lanh', 'Ti vi'])}
             </WrapperContent>
 
-            <WrapperContent>
+            {/* <WrapperContent>
                 {renderContent('checkbox', [
                     { value: 'A', label: 'A' },
                     { value: 'B', label: 'B' }
@@ -60,7 +60,7 @@ const NavbarComponent = () => {
 
             <WrapperContent>
                 {renderContent('price', ['duoi 40', 'tren 50'])}
-            </WrapperContent>
+            </WrapperContent> */}
         </div>
     )
 }

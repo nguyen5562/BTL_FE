@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 
 export const WrapperType = styled.div`
     display: flex;
@@ -7,4 +8,15 @@ export const WrapperType = styled.div`
     justify-content: flex-start;
     border-bottom: 1px solid red;
     height: 44px;
+`
+export const ButtonMore = styled(ButtonComponent)`
+    &:hover {
+        color: #fff;
+        background: rgb(13, 92, 182);
+        span {
+            color: #fff;
+        }
+    }
+    width: 100%;
+    text-align: center;
 `
