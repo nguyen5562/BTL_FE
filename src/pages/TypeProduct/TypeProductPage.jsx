@@ -13,7 +13,7 @@ const TypeProductPage = () => {
                     <NavbarComponent />
                 </Col>
             
-                <div>
+                <div style={{ background: '#fff', borderRadius: '6px' }}>
                     <WrapperProducts span={24}>
                         <CardComponent />
                         <CardComponent />
