@@ -9,7 +9,7 @@ const TypeProductPage = () => {
     return (
         <div style={{ padding: '0 120px', background: '#efefef' }}>
             <Row style={{ flexWrap: 'nowrap', paddingTop: '10px' }}>
-                <Col span={4} style={{ background: '#fff', marginRight: '10px', padding: '10px', borderRadius: '6px' }}>
+                <Col span={4} style={{ background: '#fff', marginRight: '50px', padding: '10px', borderRadius: '4px', width: '200px' }}>
                     <NavbarComponent />
                 </Col>
             

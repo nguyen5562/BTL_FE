@@ -21,34 +21,37 @@ const HomePage = () => {
                     })}           
                 </WrapperType>         
             </div>
+            
+            <div className='body' style={{ width: '100%', backgroundColor: '#efefef', }}>   
+                <div id="container" style={{ padding: '0 120px', height: '100%' }}>
+                    <SliderComponent arrImages = {[ slider1, slider2, slider3 ]} />
 
-            <div id="container" style={{ backgroundColor: '#efefef', padding: '0 120px', height: '100%' }}>
-                <SliderComponent arrImages = {[ slider1, slider2, slider3 ]} />
-
-                <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap'}}>
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
-                    <CardComponent />
+                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap'}}>
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                        <CardComponent />
+                    </div>
+                    
+                    <div style={{ width: '100%', display: 'flex', justifyContent:'center', marginTop: '10px' }}>
+                        <ButtonMore textbutton='Xem thêm' type='outline' styleButton={{
+                            border: '1px solid rgb(11, 116, 229)', color: 'rgb(11, 116, 229)',
+                            width: '240px', height: '38px', borderRadius: '4px'
+                        }}
+                        styleText={{fontWeight: '500' }}/>
+                    </div>
+                    
                 </div>
-                
-                <div style={{ width: '100%', display: 'flex', justifyContent:'center', marginTop: '10px' }}>
-                    <ButtonMore textbutton='Xem thêm' type='outline' styleButton={{
-                        border: '1px solid rgb(11, 116, 229)', color: 'rgb(11, 116, 229)',
-                        width: '240px', height: '38px', borderRadius: '4px'
-                    }}
-                    styleText={{fontWeight: '500' }}/>
-                </div>
-                
             </div>
+            
         </div>
     )
 }

@@ -6,7 +6,7 @@ export const WrapperType = styled.div`
     align-items: center;
     gap: 24px;
     justify-content: flex-start;
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid white;
     height: 44px;
 `
 export const ButtonMore = styled(ButtonComponent)`

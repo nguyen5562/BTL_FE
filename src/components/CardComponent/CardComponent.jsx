@@ -22,7 +22,7 @@ const CardComponent = () => {
                 <span> | Da ban 1000+</span>
             </CardText>
             <PriceText>
-                1.000.000 đ
+                <span style={{ marginRight: '8px' }}>1.000.000đ</span>
                 <PriceDiscount> -5%</PriceDiscount>
             </PriceText>
         </CardStyle>

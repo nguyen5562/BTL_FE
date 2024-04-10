@@ -8,13 +8,13 @@ const HeaderComponent = () => {
     return (
         <div>
             <WrapperHeader>
-                <Col span={6}>
+                <Col span={5}>
                     <WrapperTextHeader>
                         My Shop
                     </WrapperTextHeader>
                 </Col>
 
-                <Col span={12}>
+                <Col span={13}>
                     <ButtonInputSearch 
                         size = "large" 
                         placeholder = "Tìm sản phẩm" 
