@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import InputForm from '../../components/InputForm/InputForm'
 import { WrapperContainerLeft, WrapperContainerRight, WrapperTextLight } from './style'
@@ -6,10 +6,10 @@ import imageLogo from '../../assets/images/logo-login.png'
 import { Image } from 'antd'
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
-import { useMutation } from '@tanstack/react-query'
 import { userService } from '../../services/UserService'
 import { useMutationHook } from '../../hooks/useMutationHook'
 import Loading from '../../components/Loading/Loading'
+import * as message from '../../components/Message/Message'
 
 const SignUpPage = () => {
   const [isShowPass, setIsShowPass] = useState(false)
@@ -27,8 +27,16 @@ const SignUpPage = () => {
   const mutation = useMutationHook(
     data => userService.createUser(data)
   )
-  const { data, isPending } = mutation
-  console.log(data)
+  const { data, isPending, isSuccess, isError } = mutation
+
+  useEffect(() => {
+    if (isSuccess) {
+      message.success()
+      handleNavigateSignIn()
+    } else if (isError) {
+      message.error()
+    }
+  }, [isSuccess, isError])
 
   const handleOnchangeEmail = (value) => {
     setEmail(value)

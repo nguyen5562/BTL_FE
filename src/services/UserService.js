@@ -11,7 +11,17 @@ const createUser = async (data) => {
     return res.data
 }
 
+const getUser = async (id, access_token) => {
+    const res = await axios.get(`${serverConfig.server}/api/user/get-user/${id}`, {
+        headers: {
+            token: `Bearer ${access_token}`
+        }
+    })
+    return res.data
+}
+
 export const userService = {
     loginUser,
-    createUser
+    createUser,
+    getUser
 }
