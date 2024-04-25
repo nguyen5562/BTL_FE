@@ -1,7 +1,7 @@
 import React from "react"
 
 const Arrow = (props) => {
-    const { className, style, onClick, display, background, color } = props;
+    const { className, style, onClick, display, background } = props;
     return (
         <div
             className={className}

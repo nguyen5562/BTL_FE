@@ -3,8 +3,14 @@ import { Badge, Col } from "antd";
 import { WrapperHeader, WrapperTextHeader, WrapperHeaderAccount } from "./style";
 import { CaretDownOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
+import { useNavigate } from "react-router-dom";
 
 const HeaderComponent = () => {
+    const navigate = useNavigate()
+    const handleNavigateLogin = () => {
+        navigate('/sign-in')
+    }
+
     return (
         <div>
             <WrapperHeader>
@@ -28,7 +34,7 @@ const HeaderComponent = () => {
                 <Col span={6} style={{display: 'flex', gap: '20px'}}>
                     <WrapperHeaderAccount>
                         <UserOutlined style={{fontSize: '30px'}} />
-                        <div>
+                        <div onClick={handleNavigateLogin} style={{cursor: 'pointer'}}>
                             <span>Đăng nhập/Đăng kí</span>
                             <div>
                                 <span>Tài khoản</span>
