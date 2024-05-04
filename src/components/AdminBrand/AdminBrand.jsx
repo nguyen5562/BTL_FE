@@ -37,9 +37,6 @@ const AdminBrand = () => {
 
   useEffect(() => {
     fetchBrands();
-    setStateBrand({
-      name: ''
-    })
   }, [isLoading]);
 
   const [form] = Form.useForm();
