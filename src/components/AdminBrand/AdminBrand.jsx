@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { brandService } from '../../services/BrandService';
-import { Button, Form, Input, Modal, message } from 'antd';
+import { Button, Form, Input, Modal, Popconfirm, Space, message } from 'antd';
 import TableComponent from '../TableComponent/TableComponent';
 import Loading from '../Loading/Loading';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import InputComponent from '../InputComponent/InputComponent';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const AdminBrand = () => {
   const [brands, setBrands] = useState([]);
@@ -71,6 +72,30 @@ const AdminBrand = () => {
       title: 'Tên hãng',
       dataIndex: 'name',
       key: 'name',
+    },
+    {
+      title: '',
+      dataIndex: 'action',
+      key: 'action',
+      render: (text, record) => (
+        <Space size="middle">
+          <Button type="primary" icon={<EditOutlined />}
+          // onClick={() => handleEdit(record.id)}
+          >
+            Sửa
+          </Button>
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xóa sản phẩm này?"
+            // onConfirm={() => handleDelete(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" icon={<DeleteOutlined />} danger>
+              Xóa
+            </Button>
+          </Popconfirm>
+        </Space>
+      )
     }
   ];
 

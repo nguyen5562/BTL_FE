@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import TableComponent from '../TableComponent/TableComponent'
-import { Button, Form, Image, Input, InputNumber, Modal, Select, Upload, message } from 'antd';
+import { Button, Form, Image, Input, InputNumber, Modal, Popconfirm, Select, Space, Upload, message } from 'antd';
 import InputComponent from '../InputComponent/InputComponent';
 import Loading from '../Loading/Loading'
 import { brandService } from '../../services/BrandService';
 import { categoryService } from '../../services/CategoryService';
 import { productService } from '../../services/ProductService';
 import { getBase64 } from '../../utils'
-import { PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { useMutationHook } from '../../hooks/useMutationHook';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -189,7 +189,32 @@ const AdminProduct = () => {
       title: 'Hình ảnh',
       dataIndex: 'image',
       key: 'image',
+      render: (image) => <Image src={image} width={100} />
     },
+    {
+      title: '',
+      dataIndex: 'action',
+      key: 'action',
+      render: (text, record) => (
+        <Space size="middle">
+          <Button type="primary" icon={<EditOutlined />}
+          // onClick={() => handleEdit(record.id)}
+          >
+            Sửa
+          </Button>
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xóa sản phẩm này?"
+            // onConfirm={() => handleDelete(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary" icon={<DeleteOutlined />} danger>
+              Xóa
+            </Button>
+          </Popconfirm>
+        </Space>
+      )
+    }
   ];
 
   console.log(stateProduct)
@@ -203,7 +228,7 @@ const AdminProduct = () => {
           <TableComponent data={products} columns={columns} />
         </Loading>
       </div>
-      <Modal title='Thêm sản phẩm' open={isModalOpen} onCancel={handleCancel} footer={null} >
+      <Modal title='Thêm sản phẩm' open={isModalOpen} onCancel={handleCancel} footer={null} width={600} style={{top: '20px'}} >
         <Form
           name="basic"
           labelCol={{ span: 6 }}
