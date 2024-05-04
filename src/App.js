@@ -2,13 +2,13 @@ import React, { Fragment, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { routes } from "./routes";
 import DefaultComponent from "./components/Default/DefaultComponent";
-import { isJsonString } from "./utils";
-import { useDispatch, useSelector } from 'react-redux'
-import { resetUser, updateUser } from './redux/slides/userSlide'
-import { userService } from "./services/UserService";
-import { jwtDecode } from 'jwt-decode';
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser, resetUser } from "./redux/slides/userSlide";
 import Loading from "./components/Loading/Loading";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { userService } from "./services/UserService";
+import { isJsonString } from './utils'
 
 function App() {
   const dispatch = useDispatch()
@@ -41,7 +41,7 @@ function App() {
     return { decoded, storageData }
   }
 
-  axios.interceptors.request.use(async (config) => {
+  axios.create().interceptors.request.use(async (config) => {
     let storageRefreshToken = localStorage.getItem('refresh_token')
     const refreshToken = JSON.parse(storageRefreshToken)
     const currentTime = new Date()

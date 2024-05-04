@@ -21,9 +21,8 @@ const HeaderComponent = () => {
 
     const content = (
         <div>
-            <WrapperContentPopup onClick={() => handleClickNavigate('profile')}>Thông tin người dùng</WrapperContentPopup>
             {user?.isAdmin && (
-                <WrapperContentPopup onClick={() => handleClickNavigate('admin')}>Quản lí hệ thống</WrapperContentPopup>
+                <WrapperContentPopup onClick={() => handleClickNavigate('admin')}>Đi đến trang quản lý</WrapperContentPopup>
             )}
             <WrapperContentPopup onClick={() => handleClickNavigate(`my-order`)}>Đơn hàng của tôi</WrapperContentPopup>
             <WrapperContentPopup onClick={() => handleClickNavigate()}>Đăng xuất</WrapperContentPopup>
@@ -31,10 +30,8 @@ const HeaderComponent = () => {
     );
 
     const handleClickNavigate = (type) => {
-        if (type === 'profile') {
-            navigate('/profile-user')
-        } else if (type === 'admin') {
-            navigate('/system/admin')
+        if (type === 'admin') {
+            navigate('/admin')
         } else if (type === 'my-order') {
             navigate('/my-order', {
                 state: {

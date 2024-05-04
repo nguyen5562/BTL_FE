@@ -27,7 +27,7 @@ const SignInPage = () => {
   const mutation = useMutationHook(
     data => userService.loginUser(data)
   )
-  const { data, isPending, isSuccess } = mutation
+  const { data, isLoading, isSuccess } = mutation
 
   useEffect(() => {
     if (isSuccess) {
@@ -100,7 +100,7 @@ const SignInPage = () => {
 
           {data?.status === 'ERR' && <span style={{ color: 'red' }}>{data?.message}</span>}
 
-          <Loading isLoading={isPending}>
+          <Loading isLoading={isLoading}>
             <ButtonComponent
               onClick={handleSignIn}
               size={40}
