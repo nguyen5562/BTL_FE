@@ -1,4 +1,4 @@
-import { Layout, Menu, Popover, theme } from 'antd';
+import { Avatar, Layout, Menu, Popover, theme } from 'antd';
 import React, { useState } from 'react'
 import { getItem } from '../../utils';
 import { UserOutlined, ShoppingCartOutlined, ProductOutlined } from '@ant-design/icons'
@@ -113,7 +113,7 @@ const AdminPage = () => {
           }}
         >
           <div style={{ display: 'flex', gap: '12px', float: 'right', marginRight: '30px' }}>
-            <UserOutlined style={{ fontSize: '30px' }} />
+            <Avatar icon={<UserOutlined/>} size='large' style={{ marginTop: '10px' }} />
             <Popover content={content} trigger="click" open={isOpenPopup}>
               <div style={{ cursor: 'pointer', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '16px' }} onClick={() => setIsOpenPopup((prev) => !prev)}>Xin chào, {user?.name}</div>
             </Popover>

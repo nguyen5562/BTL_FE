@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import TableComponent from '../TableComponent/TableComponent'
-import { Button, Form, Image, Input, InputNumber, Modal, Popconfirm, Select, Space, Upload, message } from 'antd';
+import { Button, Form, Image, InputNumber, Modal, Popconfirm, Select, Space, Upload, message } from 'antd';
 import InputComponent from '../InputComponent/InputComponent';
 import Loading from '../Loading/Loading'
 import { brandService } from '../../services/BrandService';
@@ -34,7 +34,7 @@ const AdminProduct = () => {
       productService.createProduct(data)
     }
   )
-  const { data, isLoading, isSuccess, isError } = mutation
+  const { isLoading } = mutation
 
   const handleOnChange = (value, name) => {
     setStateProduct({
@@ -195,7 +195,7 @@ const AdminProduct = () => {
       title: '',
       dataIndex: 'action',
       key: 'action',
-      render: (text, record) => (
+      render: (record) => (
         <Space size="middle">
           <Button type="primary" icon={<EditOutlined />}
           // onClick={() => handleEdit(record.id)}
