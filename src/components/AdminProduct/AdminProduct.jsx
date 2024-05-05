@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import TableComponent from '../TableComponent/TableComponent'
-import { Button, Form, Image, InputNumber, Modal, Popconfirm, Select, Space, Upload, message } from 'antd';
+import { Button, Form, Image, Input, InputNumber, Modal, Popconfirm, Select, Space, Table, Upload, message } from 'antd';
 import InputComponent from '../InputComponent/InputComponent';
 import Loading from '../Loading/Loading'
 import { brandService } from '../../services/BrandService';
@@ -8,7 +7,6 @@ import { categoryService } from '../../services/CategoryService';
 import { productService } from '../../services/ProductService';
 import { getBase64 } from '../../utils'
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { useMutationHook } from '../../hooks/useMutationHook';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
@@ -19,6 +17,7 @@ const AdminProduct = () => {
   const [categoryObj, setCategoryObj] = useState({});
   const [products, setProducts] = useState([]);
   const [isLoadingProduct, setLoadingProduct] = useState(false);
+  const [id, setId] = useState('')
   const [stateProduct, setStateProduct] = useState({
     name: '',
     description: '',
@@ -28,17 +27,26 @@ const AdminProduct = () => {
     price: '',
     image: ''
   })
-
-  const mutation = useMutationHook(
-    (data) => {
-      productService.createProduct(data)
-    }
-  )
-  const { isLoading } = mutation
+  const [stateProductDetail, setStateProductDetail] = useState({
+    name: '',
+    description: '',
+    category: '',
+    brand: '',
+    stock: '',
+    price: '',
+    image: ''
+  })
 
   const handleOnChange = (value, name) => {
     setStateProduct({
       ...stateProduct,
+      [name]: value
+    })
+  }
+
+  const handleOnChangeDetail = (value, name) => {
+    setStateProductDetail({
+      ...stateProductDetail,
       [name]: value
     })
   }
@@ -75,7 +83,7 @@ const AdminProduct = () => {
     try {
       setLoadingProduct(true)
       const response = await productService.getAllProduct();
-      setProducts(response.data.map((product, index) => ({ ...product, key: index })));
+      setProducts(response.data.map((product, index) => ({ ...product, index: index + 1, key: product._id })));
       setLoadingProduct(false)
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -86,22 +94,58 @@ const AdminProduct = () => {
     fetchCategories();
     fetchBrands();
     fetchProducts();
-  }, [isLoading]);
+  }, []);
 
   const { Option } = Select;
   const [form] = Form.useForm();
+  const [formUpdate] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenUpdate, setIsModalOpenUpdate] = useState(false);
 
   const handleCancel = () => {
     setIsModalOpen(false)
     form.resetFields()
   }
 
-  const onFinish = () => {
-    mutation.mutate(stateProduct)
+  const handleCancelUpdate = () => {
+    setIsModalOpenUpdate(false)
+  }
+
+  const onFinish = async () => {
+    await productService.createProduct(stateProduct)
+      .then(() => fetchProducts())
     setIsModalOpen(false)
+    form.resetFields()
     message.success("Thêm thành công")
     fetchProducts()
+  }
+
+  const onFinishUpdate = async () => {
+    setIsModalOpenUpdate(false)
+    await productService.updateProduct(id, stateProductDetail)
+      .then(() => fetchProducts())
+    message.success("Sửa thành công")
+  }
+
+  const [rowSelectedKeys, setRowSelectedKeys] = useState([])
+  const rowSelection = {
+    rowSelectedKeys,
+    onChange: (selectedKeys) => {
+      setRowSelectedKeys(selectedKeys);
+    },
+  };
+
+  const handleDeleteSelected = async () => {
+    for (let index = 0; index < rowSelectedKeys.length - 1; index++) {
+      const id = rowSelectedKeys[index];
+      await productService.deleteProduct(id)
+    }
+    const index = rowSelectedKeys.length - 1
+    await productService.deleteProduct(rowSelectedKeys[index])
+      .then(() => fetchProducts())
+
+    message.success("Xoá thành công")
+    setRowSelectedKeys([])
   }
 
   // upload image
@@ -115,6 +159,18 @@ const AdminProduct = () => {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
+
+  const [previewOpenUpdate, setPreviewOpenUpdate] = useState(false);
+  const [previewImageUpdate, setPreviewImageUpdate] = useState('');
+
+  const handlePreviewUpdate = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImageUpdate(file.url || file.preview);
+    setPreviewOpenUpdate(true);
+  };
+
   //lấy file
   const uploadButton = (
     <button
@@ -146,7 +202,23 @@ const AdminProduct = () => {
     })
   }
 
+  const handleOnChangeImageUpdate = async ({ fileList }) => {
+    const file = fileList[0]
+    if (!file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setStateProductDetail({
+      ...stateProductDetail,
+      image: file.preview
+    })
+  }
+
   const columns = [
+    {
+      title: 'STT',
+      dataIndex: 'index',
+      key: 'index',
+    },
     {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
@@ -195,46 +267,80 @@ const AdminProduct = () => {
       title: '',
       dataIndex: 'action',
       key: 'action',
-      render: (record) => (
+      render: (text, record) => (
         <Space size="middle">
           <Button type="primary" icon={<EditOutlined />}
-          // onClick={() => handleEdit(record.id)}
+            onClick={async () => {
+              const res = await productService.getProduct(record.key)
+              formUpdate.setFieldsValue({
+                id: record.key,
+                name: res.data.name,
+                description: res.data.description,
+                category: res.data.category,
+                brand: res.data.brand,
+                stock: res.data.stock,
+                price: res.data.price,
+                image: res.data.image
+              })
+              setStateProductDetail({
+                ...stateProductDetail,
+                name: res.data.name,
+                description: res.data.description,
+                category: res.data.category,
+                brand: res.data.brand,
+                stock: res.data.stock,
+                price: res.data.price,
+                image: res.data.image
+              })
+              // const fileImage = {
+              //   uid: '-1',
+              //   name: 'image.png',
+              //   status: 'done',
+              //   url: res.data.image,
+              // };
+              setId(record.key)
+              setIsModalOpenUpdate(true)
+            }}
           >
             Sửa
           </Button>
-          <Popconfirm
-            title="Bạn có chắc chắn muốn xóa sản phẩm này?"
-            // onConfirm={() => handleDelete(record.id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="primary" icon={<DeleteOutlined />} danger>
-              Xóa
-            </Button>
-          </Popconfirm>
         </Space>
       )
     }
   ];
 
-  console.log(stateProduct)
-
   return (
     <div>
       <h1 style={{ color: '#000', fontSize: '18px' }}>Quản lý sản phẩm</h1>
-      <Button onClick={() => setIsModalOpen(true)}>Add Product</Button>
+      <Button style={{ marginRight: '20px' }} onClick={() => setIsModalOpen(true)}>Thêm sản phẩm</Button>
+      <Popconfirm
+        title="Bạn có chắc chắn muốn xóa các sản phẩm được chọn?"
+        onConfirm={handleDeleteSelected}
+        okText="Yes"
+        cancelText="No"
+        disabled={rowSelectedKeys.length === 0}
+      >
+        <Button
+          type="primary"
+          icon={<DeleteOutlined />}
+          disabled={rowSelectedKeys.length === 0}
+          danger
+        >
+          Xóa các sản phẩm được chọn
+        </Button>
+      </Popconfirm>
       <div style={{ marginTop: '20px' }}>
         <Loading isLoading={isLoadingProduct} >
-          <TableComponent data={products} columns={columns} />
+          <Table dataSource={products} columns={columns} rowSelection={rowSelection} />
         </Loading>
       </div>
-      <Modal title='Thêm sản phẩm' open={isModalOpen} onCancel={handleCancel} footer={null} width={600} style={{top: '20px'}} >
+      <Modal title='Thêm sản phẩm' open={isModalOpen} onCancel={handleCancel} footer={null} width={600} style={{ top: '20px' }} >
         <Form
           name="basic"
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 18 }}
           onFinish={onFinish}
-          autoComplete="on"
+          autoComplete="off"
           form={form}
         >
           <Form.Item
@@ -360,7 +466,149 @@ const AdminProduct = () => {
             </Button>
           </Form.Item>
         </Form>
+      </Modal>
 
+      <Modal title='Sửa sản phẩm' open={isModalOpenUpdate} onCancel={handleCancelUpdate} footer={null} width={600} style={{ top: '20px' }} >
+        <Form
+          name="basic2"
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 18 }}
+          autoComplete="off"
+          form={formUpdate}
+        >
+          <Form.Item
+            label="ID"
+            name="id"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input name='id' value={id} disabled />
+          </Form.Item>
+
+          <Form.Item
+            label="Tên sản phẩm"
+            name="name"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy nhập tên sản phẩm!',
+              },
+            ]}
+          >
+            <InputComponent name='name' value={stateProductDetail.name} onChange={(e) => handleOnChangeDetail(e.target.value, 'name')} />
+          </Form.Item>
+
+          <Form.Item
+            label="Loại sản phẩm"
+            name="category"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy chọn loại sản phẩm!',
+              },
+            ]}
+          >
+            <Select name='category' onChange={(value) => handleOnChangeDetail(value, 'category')} value={stateProductDetail.category} >
+              {categories.map(category => (
+                <Option key={category._id} value={category._id}>
+                  {category.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            label="Hãng"
+            name="brand"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy chọn hãng sản phẩm!',
+              },
+            ]}
+          >
+            <Select name='brand' onChange={(value) => handleOnChangeDetail(value, 'brand')} value={stateProductDetail.brand} >
+              {brands.map(brand => (
+                <Option key={brand._id} value={brand._id}>
+                  {brand.name}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item
+            label="Mô tả"
+            name="description"
+          >
+            <CKEditor editor={ClassicEditor} name='description' data={stateProductDetail.description} onChange={(e, editor) => handleOnChangeDetail(editor.getData(), 'description')} />
+          </Form.Item>
+
+          <Form.Item
+            label="Giá"
+            name="price"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy nhập giá sản phẩm!',
+              },
+            ]}
+          >
+            <InputNumber name='price' value={stateProductDetail.price} onChange={(value) => handleOnChangeDetail(value, 'price')} />
+          </Form.Item>
+
+          <Form.Item
+            label="Số lượng"
+            name="stock"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy nhập số lượng sản phẩm!',
+              },
+            ]}
+          >
+            <InputNumber name='stock' value={stateProductDetail.stock} onChange={(value) => handleOnChangeDetail(value, 'stock')} />
+          </Form.Item>
+
+          <Form.Item
+            label="Hình ảnh"
+            name="image"
+          >
+            <Upload
+              listType="picture-card"
+              onPreview={handlePreviewUpdate}
+              onChange={handleOnChangeImageUpdate}
+              maxCount={1}
+              // fileList={fileListUpdate}
+            >
+              {uploadButton}
+            </Upload>
+            <Image
+              wrapperStyle={{
+                display: 'none',
+              }}
+              preview={{
+                visible: previewOpenUpdate,
+                onVisibleChange: (visible) => setPreviewOpenUpdate(visible),
+                afterOpenChange: (visible) => !visible && setPreviewImageUpdate(''),
+              }}
+              src={previewImageUpdate}
+            />
+          </Form.Item>
+
+          <Form.Item
+            wrapperCol={{
+              offset: 8,
+              span: 16,
+            }}
+          >
+            <Button type="primary" htmlType="submit" onClick={onFinishUpdate}>
+              Cập nhật
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </div>
   )

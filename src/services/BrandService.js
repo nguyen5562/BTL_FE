@@ -26,17 +26,10 @@ const deleteBrand = async (id) => {
     return res.data
 }
 
-const deleteBrands = async (data) => {
-    data.forEach((id) => {
-        brandService.deleteBrand(id)
-    });
-}
-
 export const brandService = {
     getAllBrand,
     getBrand,
     createBrand,
     updateBrand,
-    deleteBrand,
-    deleteBrands
+    deleteBrand
 }
