@@ -2,16 +2,22 @@ import React from "react";
 import { CardName, CardStyle, CardText, PriceDiscount, PriceText } from "./style";
 import { StarFilled } from "@ant-design/icons";
 import logo from  '../../assets/images/logo.png'
+import { useNavigate } from "react-router-dom";
 
 const CardComponent = (props) => {
-    const { name, stock, description, image, price, category, brand } = props
+    const { id, name, stock, description, image, price, category, brand } = props
+    const navigate = useNavigate()
+    const handleDetailProduct = () => {
+        navigate(`/product-detail/${id}`)
+    }
     return (
         <CardStyle
             hoverable
             headStyle={{ width: '200px', height: '200px' }}
             style={{ width: 300 }}
             bodyStyle={{ padding: '10px' }}
-            cover={<img alt="example" src="https://images.ctfassets.net/hrltx12pl8hq/28ECAQiPJZ78hxatLTa7Ts/2f695d869736ae3b0de3e56ceaca3958/free-nature-images.jpg?fit=fill&w=1200&h=630" />}
+            cover={<img alt="example" src={image} />}
+            onClick={handleDetailProduct}
         >
             <img src={logo} alt="" style={{ width: '102px', height: '21px', position: 'absolute', top: -1, left: -1, borderTopLeftRadius: '3px' }} />
             <CardName>{name}</CardName>

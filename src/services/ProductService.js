@@ -1,7 +1,7 @@
 import axios from "axios";
 import { serverConfig } from "../const/serverConfig"
 
-const getAllProduct = async (filterName) => {
+const getAllProduct = async (filterName, ) => {
     let url = `${serverConfig.server}/api/product/get-all`;
 
     if (filterName && typeof filterName !== 'object') {

@@ -3,10 +3,6 @@ import styled from "styled-components";
 
 export const CardStyle = styled(Card)`
     width: 300px;
-    & img {
-        height: 300px;
-        width: 300px;
-    }
     position: relative;
 `
 

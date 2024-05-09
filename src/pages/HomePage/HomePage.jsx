@@ -9,9 +9,9 @@ import CardComponent from "../../components/CardComponent/CardComponent";
 import { useQuery } from "@tanstack/react-query";
 import { productService } from "../../services/ProductService";
 import Loading from "../../components/Loading/Loading";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useDebounce } from "../../hooks/useDebounce";
-// import NavbarComponent from "../../components/NavbarComponent/NavbarComponent";
+import { clearSearch } from "../../redux/slides/productSlide";
 
 const HomePage = () => {
     const arr = ['TV', 'Tủ lạnh', 'Máy giặt']
@@ -55,7 +55,7 @@ const HomePage = () => {
                             // Hiển thị danh sách sản phẩm
                             products.map((product) => (
                                 <CardComponent
-                                    key={product._id}
+                                    id={product._id}
                                     name={product.name}
                                     stock={product.stock}
                                     description={product.description}

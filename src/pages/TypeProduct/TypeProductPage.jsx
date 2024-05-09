@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import NavbarComponent from "../../components/NavbarComponent/NavbarComponent";
 import CardComponent from "../../components/CardComponent/CardComponent";
 import { Col, Pagination, Row } from "antd";
 import { WrapperProducts } from "./style";
+import { useSelector } from "react-redux";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const TypeProductPage = () => {
+    const searchProduct = useSelector((state) => state?.product?.search)
+    const searchDebounce = useDebounce(searchProduct, 500)
+    const [products, setProducts] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+
     const onchange = () => {}
     return (
         <div style={{ padding: '0 120px', background: '#efefef' }}>
