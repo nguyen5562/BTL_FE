@@ -6,11 +6,13 @@ import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { resetUser } from "../../redux/slides/userSlide";
+import { searchProduct } from "../../redux/slides/productSlide";
 import Loading from "../Loading/Loading";
 
 const HeaderComponent = () => {
     const [isOpenPopup, setIsOpenPopup] = useState(false)
     const [isLoading, setLoading] = useState(false)
+    const [search, setSearch] = useState('')
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
@@ -52,6 +54,12 @@ const HeaderComponent = () => {
         setLoading(false)
     }
 
+    // Search
+    const onSearch = (e) => {
+        setSearch(e.target.value)
+        dispatch(searchProduct(e.target.value))
+    }
+
     return (
         <div>
             <WrapperHeader>
@@ -71,6 +79,7 @@ const HeaderComponent = () => {
                         backgroundcolorinput='#fff'
                         backgroundcolorbutton='rgb(13, 92, 182)'
                         colorbutton='#000'
+                        onChange={onSearch}
                     />
                 </Col>
 

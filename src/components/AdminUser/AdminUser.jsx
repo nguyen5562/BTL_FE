@@ -183,6 +183,12 @@ const AdminUser = () => {
             dataSource={users}
             columns={columns}
             rowSelection={rowSelection}
+            pagination={{ 
+              position: 'bottom',
+              total: users.length, // Tổng số items
+              showSizeChanger: true, // Hiển thị chọn pageSize
+              pageSizeOptions: ['5', '10', '20'] // Các lựa chọn pageSize
+            }}
           />
         </Loading>
       </div>

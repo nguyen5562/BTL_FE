@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TypeProduct from "../../components/TypeProduct/TypeProduct";
 import { ButtonMore, WrapperType } from "./style";
 import SliderComponent from "../../components/SliderComponent/SliderComponent";
@@ -8,20 +8,32 @@ import slider3 from "../../assets/images/slider3.webp"
 import CardComponent from "../../components/CardComponent/CardComponent";
 import { useQuery } from "@tanstack/react-query";
 import { productService } from "../../services/ProductService";
+import Loading from "../../components/Loading/Loading";
+import { useSelector } from "react-redux";
+import { useDebounce } from "../../hooks/useDebounce";
 // import NavbarComponent from "../../components/NavbarComponent/NavbarComponent";
 
 const HomePage = () => {
     const arr = ['TV', 'Tủ lạnh', 'Máy giặt']
-
+    const searchProduct = useSelector((state) => state?.product?.search)
+    const searchDebounce = useDebounce(searchProduct, 500)
+    const [products, setProducts] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const fetchProductAll = async () => {
-        const res = await productService.getAllProduct()
-        return res
+        setIsLoading(true)
+        const res = await productService.getAllProduct(searchDebounce)
+        setProducts(res.data)
+        setIsLoading(false)
     }
 
-    const { isLoading, data: products } = useQuery(['products'], fetchProductAll, { retry: 3, retryDelay: 1000 })
+    useEffect(() => {
+        fetchProductAll()
+    }, [searchDebounce])
+
+    console.log(products)
 
     return (
-        <div>
+        <Loading isLoading={isLoading}>
             <div style={{ padding: '0 120px' }}>
                 <WrapperType>
                     {arr.map((item) => {
@@ -37,8 +49,11 @@ const HomePage = () => {
                     <SliderComponent arrImages={[slider1, slider2, slider3]} />
 
                     <div style={{ marginTop: '20px', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-                        {products?.data?.map((product) => {
-                            return (
+                        {products.length === 0 ? ( // Kiểm tra nếu không có sản phẩm
+                            <p>Không có sản phẩm nào được tìm thấy.</p>
+                        ) : (
+                            // Hiển thị danh sách sản phẩm
+                            products.map((product) => (
                                 <CardComponent
                                     key={product._id}
                                     name={product.name}
@@ -49,8 +64,8 @@ const HomePage = () => {
                                     category={product.category}
                                     brand={product.brand}
                                 />
-                            )
-                        })}
+                            ))
+                        )}
                     </div>
 
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
@@ -64,7 +79,7 @@ const HomePage = () => {
                 </div>
             </div>
 
-        </div>
+        </Loading>
     )
 }
 

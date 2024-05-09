@@ -331,7 +331,17 @@ const AdminProduct = () => {
       </Popconfirm>
       <div style={{ marginTop: '20px' }}>
         <Loading isLoading={isLoadingProduct} >
-          <Table dataSource={products} columns={columns} rowSelection={rowSelection} />
+          <Table
+            dataSource={products}
+            columns={columns}
+            rowSelection={rowSelection}
+            pagination={{
+              position: 'bottom',
+              total: products.length, // Tổng số items
+              showSizeChanger: true, // Hiển thị chọn pageSize
+              pageSizeOptions: ['5', '10', '20'] // Các lựa chọn pageSize
+            }}
+          />
         </Loading>
       </div>
       <Modal title='Thêm sản phẩm' open={isModalOpen} onCancel={handleCancel} footer={null} width={600} style={{ top: '20px' }} >
@@ -581,7 +591,7 @@ const AdminProduct = () => {
               onPreview={handlePreviewUpdate}
               onChange={handleOnChangeImageUpdate}
               maxCount={1}
-              // fileList={fileListUpdate}
+            // fileList={fileListUpdate}
             >
               {uploadButton}
             </Upload>
