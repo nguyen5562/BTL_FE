@@ -15,6 +15,7 @@ const HeaderComponent = () => {
     const [search, setSearch] = useState('')
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const order = useSelector((state) => state.order)
     const user = useSelector((state) => state.user)
 
     const handleNavigateLogin = () => {
@@ -52,6 +53,10 @@ const HeaderComponent = () => {
         localStorage.clear()
         dispatch(resetUser())
         setLoading(false)
+    }
+
+    const handleCart = () => {
+        navigate('/order')
     }
 
     // Search
@@ -106,8 +111,8 @@ const HeaderComponent = () => {
                     </Loading>
 
                     <WrapperHeaderAccount>
-                        <Badge count={4} size="small">
-                            <ShoppingCartOutlined style={{ fontSize: '30px', color: '#fff' }} />
+                        <Badge count={order?.orderItems?.length} size="small">
+                            <ShoppingCartOutlined onClick={handleCart} style={{ fontSize: '30px', color: '#fff' }} />
                         </Badge>
 
                         <div style={{ fontSize: '13px' }}>Giỏ hàng</div>

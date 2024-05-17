@@ -2,6 +2,7 @@ import { Avatar, Layout, Menu, Popover, theme } from 'antd';
 import React, { useState } from 'react'
 import { getItem } from '../../utils';
 import { UserOutlined, ShoppingCartOutlined, ProductOutlined } from '@ant-design/icons'
+import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import AdminUser from '../../components/AdminUser/AdminUser';
 import AdminProduct from '../../components/AdminProduct/AdminProduct';
@@ -25,7 +26,7 @@ const AdminPage = () => {
 
   const items = [
     getItem('Người dùng', 'users', <UserOutlined />),
-    getItem('Danh mục', 'categories'),
+    getItem('Danh mục', 'categories', <CategoryOutlinedIcon />),
     getItem('Hãng', 'brands'),
     getItem('Sản phẩm', 'products', <ProductOutlined />),
     getItem('Đơn hàng', 'orders', <ShoppingCartOutlined />),

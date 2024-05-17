@@ -1,11 +1,22 @@
 import axios from "axios";
 import { serverConfig } from "../const/serverConfig"
 
-const getAllProduct = async (filterName, ) => {
+const getAllProduct = async ( filterName ) => {
     let url = `${serverConfig.server}/api/product/get-all`;
 
     if (filterName && typeof filterName !== 'object') {
         url += `?filterName=${filterName}`;
+    }
+
+    const res = await axios.get(url)
+    return res.data
+}
+
+const getAllProductCategory = async (id, filterName) => {
+    let url = `${serverConfig.server}/api/product/get-all?filterCategory=${id}`;
+
+    if (filterName && typeof filterName !== 'object') {
+        url += `&filterName=${filterName}`;
     }
 
     const res = await axios.get(url)
@@ -34,6 +45,7 @@ const deleteProduct = async (id) => {
 
 export const productService = {
     getAllProduct,
+    getAllProductCategory,
     getProduct,
     createProduct,
     updateProduct,

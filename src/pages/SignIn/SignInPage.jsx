@@ -5,7 +5,7 @@ import { WrapperContainerLeft, WrapperContainerRight, WrapperTextLight } from '.
 import imageLogo from '../../assets/images/logo-login.png'
 import { Image } from 'antd'
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { userService } from '../../services/UserService'
 import { useMutationHook } from '../../hooks/useMutationHook'
 import Loading from '../../components/Loading/Loading'
@@ -19,9 +19,11 @@ const SignInPage = () => {
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
+  const {state} = location
 
   const handleNavigateSignUp = () => {
-    navigate('/sign-up')
+    navigate('/sign-up', {state: state})
   }
 
   const mutation = useMutationHook(
@@ -30,17 +32,32 @@ const SignInPage = () => {
   const { data, isLoading, isSuccess } = mutation
 
   useEffect(() => {
-    if (isSuccess) {
-      navigate('/')
-      localStorage.setItem('access_token', JSON.stringify(data?.access_token))
-      localStorage.setItem('refresh_token', JSON.stringify(data?.refresh_token))
-      if (data?.access_token) {
-        const decoded = jwtDecode(data?.access_token)
-        if (decoded?.id) {
-          handleGetUser(decoded?.id, data?.access_token)
+    if (state) {
+      if (isSuccess) {
+        navigate(`/product-detail/${state}`)
+        localStorage.setItem('access_token', JSON.stringify(data?.access_token))
+        localStorage.setItem('refresh_token', JSON.stringify(data?.refresh_token))
+        if (data?.access_token) {
+          const decoded = jwtDecode(data?.access_token)
+          if (decoded?.id) {
+            handleGetUser(decoded?.id, data?.access_token)
+          }
+        }
+      }
+    } else {
+      if (isSuccess) {
+        navigate('/')
+        localStorage.setItem('access_token', JSON.stringify(data?.access_token))
+        localStorage.setItem('refresh_token', JSON.stringify(data?.refresh_token))
+        if (data?.access_token) {
+          const decoded = jwtDecode(data?.access_token)
+          if (decoded?.id) {
+            handleGetUser(decoded?.id, data?.access_token)
+          }
         }
       }
     }
+    
   }, [isSuccess])
 
   const handleGetUser = async (id, token) => {

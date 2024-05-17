@@ -5,7 +5,7 @@ import { WrapperContainerLeft, WrapperContainerRight, WrapperTextLight } from '.
 import imageLogo from '../../assets/images/logo-login.png'
 import { Image } from 'antd'
 import { EyeFilled, EyeInvisibleFilled } from '@ant-design/icons'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { userService } from '../../services/UserService'
 import { useMutationHook } from '../../hooks/useMutationHook'
 import Loading from '../../components/Loading/Loading'
@@ -18,10 +18,12 @@ const SignUpPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setComfirmPassword] = useState('')
+  const location = useLocation()
+  const {state} = location
 
   const navigate = useNavigate()
   const handleNavigateSignIn = () => {
-    navigate('/sign-in')
+    navigate('/sign-in', {state: state})
   }
 
   const mutation = useMutationHook(

@@ -155,8 +155,6 @@ const AdminUser = () => {
     }
   ];
 
-  console.log(access_token)
-
   return (
     <div>
       <h1 style={{ color: '#000', fontSize: '18px' }}>Quản lý người dùng</h1>

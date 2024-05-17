@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import TypeProduct from "../../components/TypeProduct/TypeProduct";
-import { ButtonMore, WrapperType } from "./style";
+import { WrapperType } from "./style";
 import SliderComponent from "../../components/SliderComponent/SliderComponent";
 import slider1 from "../../assets/images/slider1.webp"
 import slider2 from "../../assets/images/slider2.webp"
 import slider3 from "../../assets/images/slider3.webp"
 import CardComponent from "../../components/CardComponent/CardComponent";
-import { useQuery } from "@tanstack/react-query";
 import { productService } from "../../services/ProductService";
+import { categoryService } from "../../services/CategoryService";
 import Loading from "../../components/Loading/Loading";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useDebounce } from "../../hooks/useDebounce";
-import { clearSearch } from "../../redux/slides/productSlide";
 
 const HomePage = () => {
-    const arr = ['TV', 'Tủ lạnh', 'Máy giặt']
     const searchProduct = useSelector((state) => state?.product?.search)
     const searchDebounce = useDebounce(searchProduct, 500)
     const [products, setProducts] = useState([])
     const [isLoading, setIsLoading] = useState(false)
+    const [categories, setCategories] = useState([])
+
     const fetchProductAll = async () => {
         setIsLoading(true)
         const res = await productService.getAllProduct(searchDebounce)
@@ -26,19 +26,26 @@ const HomePage = () => {
         setIsLoading(false)
     }
 
+    const fetchCategory = async () => {
+        const res = await categoryService.getAllCategory()
+        setCategories(res.data)
+    }
+
+    useEffect(() => {
+        fetchCategory()
+    }, [])
+
     useEffect(() => {
         fetchProductAll()
     }, [searchDebounce])
-
-    console.log(products)
 
     return (
         <Loading isLoading={isLoading}>
             <div style={{ padding: '0 120px' }}>
                 <WrapperType>
-                    {arr.map((item) => {
+                    {categories.map((category) => {
                         return (
-                            <TypeProduct name={item} key={item} />
+                            <TypeProduct name={category.name} id={category._id} />
                         )
                     })}
                 </WrapperType>
@@ -67,15 +74,6 @@ const HomePage = () => {
                             ))
                         )}
                     </div>
-
-                    <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '10px' }}>
-                        <ButtonMore textbutton='Xem thêm' type='outline' styleButton={{
-                            border: '1px solid rgb(11, 116, 229)', color: 'rgb(11, 116, 229)',
-                            width: '240px', height: '38px', borderRadius: '4px'
-                        }}
-                            styleText={{ fontWeight: '500' }} />
-                    </div>
-
                 </div>
             </div>
 
