@@ -7,7 +7,7 @@ import { updateUser, resetUser } from "./redux/slides/userSlide";
 import Loading from "./components/Loading/Loading";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { userService } from "./services/UserService";
+import { userService } from "./services/UserService"
 import { isJsonString } from './utils'
 
 function App() {

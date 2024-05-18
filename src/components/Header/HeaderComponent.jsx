@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Badge, Col, Popover } from "antd";
+import { Badge, Col, Image, Popover } from "antd";
 import { WrapperHeader, WrapperTextHeader, WrapperHeaderAccount, WrapperContentPopup } from "./style";
 import { CaretDownOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { resetUser } from "../../redux/slides/userSlide";
 import { searchProduct } from "../../redux/slides/productSlide";
 import Loading from "../Loading/Loading";
+import logo from "../../assets/images/output-onlinepngtools.png"
 
 const HeaderComponent = () => {
     const [isOpenPopup, setIsOpenPopup] = useState(false)
@@ -72,7 +73,7 @@ const HeaderComponent = () => {
                     <WrapperTextHeader onClick={() => {
                         navigate('/')
                     }}>
-                        My Shop
+                        MTA Store
                     </WrapperTextHeader>
                 </Col>
 

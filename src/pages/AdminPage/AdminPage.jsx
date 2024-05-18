@@ -101,7 +101,7 @@ const AdminPage = () => {
           bottom: 0,
         }}
       >
-        <div className="demo-logo-vertical">hsdhhfds</div>
+        <div className="demo-logo-vertical" style={{ color: 'white', fontSize: '18px', fontWeight: '600', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>MTA Store</div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['users']} items={items} onClick={handleOnCLick} />
       </Sider>
       <Layout style={{

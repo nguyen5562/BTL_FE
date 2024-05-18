@@ -1,13 +1,14 @@
-import { Button, Col, Image, Input, InputNumber, Row } from 'antd'
+import { Button, Col, Image, InputNumber, Row } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { WrapperAdd, WrapperInputNumber, WrapperProductName, WrapperQualityProduct } from './style'
-import { MinusOutlined, PlusOutlined, StarFilled } from '@ant-design/icons'
+import { WrapperProductName } from './style'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import ButtonComponent from '../ButtonComponent/ButtonComponent'
 import { productService } from '../../services/ProductService'
 import { Rating } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addOrderProduct } from '../../redux/slides/orderSlide'
+import { convertPrice } from '../../utils'
 
 const ProductDetailComponent = ({ id }) => {
   const [stateProductDetail, setStateProductDetail] = useState({
@@ -36,7 +37,7 @@ const ProductDetailComponent = ({ id }) => {
 
   useEffect(() => {
     fetchProductDetail()
-  }, []);
+  }, [])
 
   const [quantity, setQuantity] = useState(1)
   const decrease = () => {
@@ -98,7 +99,7 @@ const ProductDetailComponent = ({ id }) => {
         </div>
 
         <div style={{ borderRadius: '4px' }}>
-          <h1 style={{ fontSize: '32px', lineHeight: '40px', marginRight: '8px', fontWeight: '500' }}>{stateProductDetail.price}<sup>₫</sup></h1>
+          <h1 style={{ fontSize: '32px', lineHeight: '40px', marginRight: '8px', fontWeight: '500' }}>{convertPrice(stateProductDetail.price)}</h1>
         </div>
 
         <div>

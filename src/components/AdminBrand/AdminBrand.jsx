@@ -4,7 +4,6 @@ import { Button, Form, Input, Modal, Popconfirm, Space, Table, message } from 'a
 import Loading from '../Loading/Loading';
 import InputComponent from '../InputComponent/InputComponent';
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
-import axios from 'axios';
 
 const AdminBrand = () => {
   const [brands, setBrands] = useState([]);
