@@ -1,8 +1,7 @@
 import { Avatar, Layout, Menu, Popover, theme } from 'antd';
 import React, { useState } from 'react'
 import { getItem } from '../../utils';
-import { UserOutlined, ShoppingCartOutlined, ProductOutlined } from '@ant-design/icons'
-import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
+import { UserOutlined, ShoppingCartOutlined, ProductOutlined, BarsOutlined, TagsOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux';
 import AdminUser from '../../components/AdminUser/AdminUser';
 import AdminProduct from '../../components/AdminProduct/AdminProduct';
@@ -12,6 +11,7 @@ import AdminBrand from '../../components/AdminBrand/AdminBrand';
 import '../AdminPage/AdminPage.css'
 import { useNavigate } from 'react-router-dom';
 import { resetUser } from '../../redux/slides/userSlide';
+import { removeAllOrderProduct } from '../../redux/slides/orderSlide';
 
 const AdminPage = () => {
   const {
@@ -26,9 +26,9 @@ const AdminPage = () => {
 
   const items = [
     getItem('Người dùng', 'users', <UserOutlined />),
-    getItem('Danh mục', 'categories', <CategoryOutlinedIcon />),
-    getItem('Hãng', 'brands'),
-    getItem('Sản phẩm', 'products', <ProductOutlined />),
+    getItem('Danh mục', 'categories', <BarsOutlined />),
+    getItem('Hãng', 'brands', <TagsOutlined />),
+    getItem('Sản phẩm', 'products', <ProductOutlined />), 
     getItem('Đơn hàng', 'orders', <ShoppingCartOutlined />),
   ];
 
@@ -87,6 +87,7 @@ const AdminPage = () => {
   const handleLogout = async () => {
     localStorage.clear()
     dispatch(resetUser())
+    dispatch(removeAllOrderProduct())
   }
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Badge, Col, Image, Popover } from "antd";
+import { Badge, Col, Popover } from "antd";
 import { WrapperHeader, WrapperTextHeader, WrapperHeaderAccount, WrapperContentPopup } from "./style";
 import { CaretDownOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { resetUser } from "../../redux/slides/userSlide";
 import { searchProduct } from "../../redux/slides/productSlide";
 import Loading from "../Loading/Loading";
-import logo from "../../assets/images/output-onlinepngtools.png"
+import { removeAllOrderProduct } from "../../redux/slides/orderSlide";
 
 const HeaderComponent = () => {
     const [isOpenPopup, setIsOpenPopup] = useState(false)
@@ -53,6 +53,7 @@ const HeaderComponent = () => {
         setLoading(true)
         localStorage.clear()
         dispatch(resetUser())
+        dispatch(removeAllOrderProduct())
         setLoading(false)
     }
 

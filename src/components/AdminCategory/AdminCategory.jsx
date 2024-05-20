@@ -224,7 +224,7 @@ const AdminCategory = () => {
       <h1 style={{ color: '#000', fontSize: '18px' }}>Quản lý danh mục</h1>
       <Button style={{ marginRight: '20px' }} onClick={() => setIsModalOpen(true)}>Thêm danh mục</Button>
       <Popconfirm
-        title="Bạn có chắc chắn muốn xóa các danh mục được chọn?"
+        title="Bạn có chắc chắn muốn xóa các danh mục đã chọn?"
         onConfirm={handleDeleteSelected}
         okText="Yes"
         cancelText="No"

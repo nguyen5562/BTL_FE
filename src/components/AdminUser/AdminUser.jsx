@@ -160,7 +160,7 @@ const AdminUser = () => {
       <h1 style={{ color: '#000', fontSize: '18px' }}>Quản lý người dùng</h1>
       <Button style={{ marginRight: '20px' }} onClick={() => setIsModalOpen(true)}>Thêm người dùng</Button>
       <Popconfirm
-        title="Bạn có chắc chắn muốn xóa các người dùng được chọn?"
+        title="Bạn có chắc chắn muốn xóa các người dùng đã chọn?"
         onConfirm={handleDeleteSelected}
         okText="Yes"
         cancelText="No"

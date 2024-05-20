@@ -314,7 +314,7 @@ const AdminProduct = () => {
       <h1 style={{ color: '#000', fontSize: '18px' }}>Quản lý sản phẩm</h1>
       <Button style={{ marginRight: '20px' }} onClick={() => setIsModalOpen(true)}>Thêm sản phẩm</Button>
       <Popconfirm
-        title="Bạn có chắc chắn muốn xóa các sản phẩm được chọn?"
+        title="Bạn có chắc chắn muốn xóa các sản phẩm đã chọn?"
         onConfirm={handleDeleteSelected}
         okText="Yes"
         cancelText="No"

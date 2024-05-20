@@ -1,18 +1,18 @@
-import { Button, Form, Input, InputNumber, Modal, Select } from 'antd'
+import { Button, Form, Input, InputNumber, Modal, Select, message } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { WrapperCountOrder, WrapperInfo, WrapperItemOrder, WrapperLeft, WrapperListOrder, WrapperRight, WrapperStyleHeader, WrapperTotal } from './style'
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
-import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { decreaseQuantity, increaseQuantity, removeOrderProduct, setQuantity } from '../../redux/slides/orderSlide'
+import { decreaseQuantity, increaseQuantity, removeAllOrderProduct, removeOrderProduct, setQuantity } from '../../redux/slides/orderSlide'
 import { convertPrice } from '../../utils'
 import axios from 'axios'
+import { orderService } from '../../services/OrderService'
+import Loading from '../../components/Loading/Loading'
 
 const OrderPage = () => {
   const order = useSelector((state) => state.order)
   const user = useSelector((state) => state.user)
-  const navigate = useNavigate()
   const [form] = Form.useForm()
   const dispatch = useDispatch()
 
@@ -83,20 +83,58 @@ const OrderPage = () => {
     setSelectedCity(value);
     setDistricts(data.find(city => city.Name === value)?.Districts || []);
     setWards([]);
+    form.setFieldsValue({
+      district: undefined,
+      ward: undefined,
+    });
   };
 
   const handleDistrictChange = (value) => {
     setSelectedDistrict(value);
     const city = data.find(city => city.Name === selectedCity);
     setWards(city?.Districts.find(district => district.Name === value)?.Wards || []);
+    form.setFieldsValue({
+      ward: undefined,
+    });
   };
 
   useEffect(() => {
     fetchData()
   }, [])
 
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleAddOrder = async () => {
+    setIsLoading(true)
+    let shippingAddress = `${address}, ${ward}, ${district}, ${province}`
+    let data = {
+      shippingAddress: shippingAddress,
+      recipient: name,
+      phone: phone,
+      orderDate: Date.now(),
+      paymentMethod: 'Thanh toan khi nhan hang',
+      status: 1,
+      totalPrice: totalPrice(),
+      user: user.id,
+      orderItems: order.orderItems.map(item => {
+        return {
+          product: item.product,
+          name: item.name,
+          image: item.image,
+          quantity: item.quantity,
+          price: item.price,
+          totalPrice: item.price * item.quantity
+        }
+      })
+    }
+    const res = await orderService.createOrder(data)
+      .then(() => dispatch(removeAllOrderProduct()))
+    setIsLoading(false)
+    message.success("Mua hàng thành công")
+  }
+
   return (
-    <>
+    <Loading isLoading={isLoading}>
       {/* {contextHolder} */}
       {order.orderItems.length === 0 ? (
         <p style={{ fontWeight: 'bold', marginTop: '30px', marginLeft: '120px' }}>Chưa có sản phẩm nào trong giỏ hàng</p>
@@ -178,7 +216,7 @@ const OrderPage = () => {
                   </WrapperTotal>
                 </div>
                 <ButtonComponent
-                  // onClick={() => handleAddCard()}
+                  onClick={() => handleAddOrder()}
                   size={40}
                   styleButton={{
                     background: 'rgb(255, 57, 69)',
@@ -241,7 +279,6 @@ const OrderPage = () => {
                 <Select
                   showSearch
                   onChange={handleCityChange}
-
                 >
                   {cities.map(city => (
                     <Option key={city.Id} value={city.Name}>{city.Name}</Option>
@@ -310,7 +347,7 @@ const OrderPage = () => {
           </Modal>
         </div>
       )}
-    </>
+    </Loading>
   )
 }
 

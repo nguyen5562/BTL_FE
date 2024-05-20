@@ -147,15 +147,6 @@ const AdminBrand = () => {
           >
             Reset
           </Button>
-          {/* <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              close();
-            }}
-          >
-            Close
-          </Button> */}
         </Space>
       </div>
     ),
@@ -220,7 +211,7 @@ const AdminBrand = () => {
       <h1 style={{ color: '#000', fontSize: '18px' }}>Quản lý hãng</h1>
       <Button style={{ marginRight: '20px' }} onClick={() => setIsModalOpen(true)}>Thêm hãng</Button>
       <Popconfirm
-        title="Bạn có chắc chắn muốn xóa các hãng được chọn?"
+        title="Bạn có chắc chắn muốn xóa các hãng đã chọn?"
         onConfirm={handleDeleteSelected}
         okText="Yes"
         cancelText="No"

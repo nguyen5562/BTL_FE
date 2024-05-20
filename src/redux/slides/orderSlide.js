@@ -1,12 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  orderItems: [],
-  shippingAddress: {},
-  paymentMethod: '',
-  status: false,
-  totalPrice: 0,
-  user: ''
+  orderItems: []
 }
 
 export const orderSlide = createSlice({
