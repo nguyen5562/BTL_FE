@@ -59,7 +59,7 @@ const TypeProductPage = () => {
         fetchBrand()
         fetchProductByCategory()
         setIsLoading(false)
-    }, [])
+    }, [location])
 
     const filterProduct = () => {
         setIsLoading(true)
@@ -100,6 +100,10 @@ const TypeProductPage = () => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     const productsToShow = filterProducts.slice(startIndex, endIndex);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [location]);
 
     return (
         <Loading isLoading={isLoading}>

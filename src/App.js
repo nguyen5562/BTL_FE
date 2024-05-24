@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, createBrowserRouter } from 'react-router-dom'
 import { routes } from "./routes";
 import DefaultComponent from "./components/Default/DefaultComponent";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,6 +56,8 @@ function App() {
   }, (err) => {
     return Promise.reject(err)
   })
+
+  const router = createBrowserRouter(routes)
 
   return (
     <div>
