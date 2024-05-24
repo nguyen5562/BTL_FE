@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Form, Image, Input, InputNumber, Modal, Popconfirm, Select, Space, Table, Upload, message } from 'antd';
-import InputComponent from '../InputComponent/InputComponent';
 import Loading from '../Loading/Loading'
 import { brandService } from '../../services/BrandService';
 import { categoryService } from '../../services/CategoryService';
@@ -9,6 +8,8 @@ import { getBase64 } from '../../utils'
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { imageService } from '../../services/ImageService';
+import { serverConfig } from '../../const/serverConfig';
 
 const AdminProduct = () => {
   const [brands, setBrands] = useState([]);
@@ -17,39 +18,10 @@ const AdminProduct = () => {
   const [categoryObj, setCategoryObj] = useState({});
   const [products, setProducts] = useState([]);
   const [isLoadingProduct, setLoadingProduct] = useState(false);
-  const [id, setId] = useState('')
-  const [stateProduct, setStateProduct] = useState({
-    name: '',
-    description: '',
-    category: '',
-    brand: '',
-    stock: '',
-    price: '',
-    image: ''
-  })
-  const [stateProductDetail, setStateProductDetail] = useState({
-    name: '',
-    description: '',
-    category: '',
-    brand: '',
-    stock: '',
-    price: '',
-    image: ''
-  })
-
-  const handleOnChange = (value, name) => {
-    setStateProduct({
-      ...stateProduct,
-      [name]: value
-    })
-  }
-
-  const handleOnChangeDetail = (value, name) => {
-    setStateProductDetail({
-      ...stateProductDetail,
-      [name]: value
-    })
-  }
+  const [file, setFile] = useState(null)
+  const [descriptionCkData, setDescriptionCkData] = useState('');
+  const [descriptionCkDataUpdate, setDescriptionCkDataUpdate] = useState('');
+  const [fileListUpdate, setFileListUpdate] = useState([])
 
   const fetchBrands = async () => {
     try {
@@ -105,26 +77,46 @@ const AdminProduct = () => {
   const handleCancel = () => {
     setIsModalOpen(false)
     form.resetFields()
+    form.setFieldsValue({
+      description: undefined
+    })
   }
 
   const handleCancelUpdate = () => {
     setIsModalOpenUpdate(false)
   }
 
-  const onFinish = async () => {
-    await productService.createProduct(stateProduct)
+  const onFinish = async (value) => {
+    const data = {
+      name: value.name,
+      description: descriptionCkData,
+      price: value.price,
+      stock: value.stock,
+      category: value.category,
+      brand: value.brand,
+      image: file
+    }
+    await productService.createProduct(data)
       .then(() => fetchProducts())
     setIsModalOpen(false)
     form.resetFields()
     message.success("Thêm thành công")
-    fetchProducts()
   }
 
-  const onFinishUpdate = async () => {
+  const onFinishUpdate = async (value) => {
+    const data = {
+      name: value.name,
+      description: descriptionCkDataUpdate,
+      price: value.price,
+      stock: value.stock,
+      category: value.category,
+      brand: value.brand,
+      image: file
+    }
     setIsModalOpenUpdate(false)
-    await productService.updateProduct(id, stateProductDetail)
+    await productService.updateProduct(value.id, data)
       .then(() => fetchProducts())
-    message.success("Sửa thành công")
+    message.success("Cập nhật thành công")
   }
 
   const [rowSelectedKeys, setRowSelectedKeys] = useState([])
@@ -146,6 +138,16 @@ const AdminProduct = () => {
 
     message.success("Xoá thành công")
     setRowSelectedKeys([])
+  }
+
+  const handleEditorChange = (event, editor) => {
+    const data = editor.getData();
+    setDescriptionCkData(data);
+  }
+
+  const handleEditorChangeUpdate = (event, editor) => {
+    const data = editor.getData();
+    setDescriptionCkDataUpdate(data);
   }
 
   // upload image
@@ -191,27 +193,29 @@ const AdminProduct = () => {
     </button>
   );
 
-  const handleOnChangeImage = async ({ fileList }) => {
-    const file = fileList[0]
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+  const onChange = (info) => {
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
     }
-    setStateProduct({
-      ...stateProduct,
-      image: file.preview
-    })
-  }
+  };
 
-  const handleOnChangeImageUpdate = async ({ fileList }) => {
-    const file = fileList[0]
-    if (!file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setStateProductDetail({
-      ...stateProductDetail,
-      image: file.preview
-    })
-  }
+  const onChangeUpdate = ({ fileList: newFileList }) => setFileListUpdate(newFileList);
+
+  const customRequest = async ({ file, onSuccess, onError }) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    await imageService.uploadImage(formData)
+      .then(response => {
+        setFile(response.path); // Lưu đường dẫn tệp tin trả về từ server
+        onSuccess(response, file);
+      })
+      .catch(error => {
+        onError(error);
+      });
+  };
 
   const columns = [
     {
@@ -223,11 +227,6 @@ const AdminProduct = () => {
       title: 'Tên sản phẩm',
       dataIndex: 'name',
       key: 'name',
-    },
-    {
-      title: 'Mô tả',
-      dataIndex: 'description',
-      key: 'description',
     },
     {
       title: 'Danh mục',
@@ -261,7 +260,7 @@ const AdminProduct = () => {
       title: 'Hình ảnh',
       dataIndex: 'image',
       key: 'image',
-      render: (image) => <Image src={image} width={100} />
+      render: (image) => <Image src={`${serverConfig.server}/uploads/${image}`} width={100} />
     },
     {
       title: '',
@@ -282,23 +281,18 @@ const AdminProduct = () => {
                 price: res.data.price,
                 image: res.data.image
               })
-              setStateProductDetail({
-                ...stateProductDetail,
-                name: res.data.name,
-                description: res.data.description,
-                category: res.data.category,
-                brand: res.data.brand,
-                stock: res.data.stock,
-                price: res.data.price,
-                image: res.data.image
-              })
-              // const fileImage = {
-              //   uid: '-1',
-              //   name: 'image.png',
-              //   status: 'done',
-              //   url: res.data.image,
-              // };
-              setId(record.key)
+
+              const fileImage = {
+                uid: '-1',
+                name: res.data.image,
+                status: 'done',
+                url: `${serverConfig.server}/uploads/${res.data.image}`,
+              };
+              const newFileList = []
+              newFileList.push(fileImage)
+              setFileListUpdate(newFileList)
+
+              setDescriptionCkDataUpdate(res.data.description)
               setIsModalOpenUpdate(true)
             }}
           >
@@ -363,7 +357,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <InputComponent name='name' value={stateProduct.name} onChange={(e) => handleOnChange(e.target.value, 'name')} />
+            <Input name='name' />
           </Form.Item>
 
           <Form.Item
@@ -376,7 +370,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <Select name='category' onChange={(value) => handleOnChange(value, 'category')} value={stateProduct.category} >
+            <Select name='category' >
               {categories.map(category => (
                 <Option key={category._id} value={category._id}>
                   {category.name}
@@ -395,7 +389,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <Select name='brand' onChange={(value) => handleOnChange(value, 'brand')} value={stateProduct.brand} >
+            <Select name='brand' >
               {brands.map(brand => (
                 <Option key={brand._id} value={brand._id}>
                   {brand.name}
@@ -408,7 +402,7 @@ const AdminProduct = () => {
             label="Mô tả"
             name="description"
           >
-            <CKEditor editor={ClassicEditor} name='description' data={stateProduct.description} onChange={(e, editor) => handleOnChange(editor.getData(), 'description')} />
+            <CKEditor editor={ClassicEditor} name='description' data={descriptionCkData} onChange={handleEditorChange} />
           </Form.Item>
 
           <Form.Item
@@ -421,7 +415,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <InputNumber name='price' value={stateProduct.price} onChange={(value) => handleOnChange(value, 'price')} />
+            <InputNumber name='price' />
           </Form.Item>
 
           <Form.Item
@@ -434,7 +428,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <InputNumber name='stock' value={stateProduct.stock} onChange={(value) => handleOnChange(value, 'stock')} />
+            <InputNumber name='stock' />
           </Form.Item>
 
           <Form.Item
@@ -443,8 +437,10 @@ const AdminProduct = () => {
           >
             <Upload
               listType="picture-card"
+              customRequest={customRequest}
+              onChange={onChange}
               onPreview={handlePreview}
-              onChange={handleOnChangeImage}
+              // onChange={handleOnChangeImage}
               maxCount={1}
             >
               {uploadButton}
@@ -485,17 +481,13 @@ const AdminProduct = () => {
           wrapperCol={{ span: 18 }}
           autoComplete="off"
           form={formUpdate}
+          onFinish={onFinishUpdate}
         >
           <Form.Item
             label="ID"
             name="id"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
           >
-            <Input name='id' value={id} disabled />
+            <Input name='id' disabled />
           </Form.Item>
 
           <Form.Item
@@ -508,7 +500,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <InputComponent name='name' value={stateProductDetail.name} onChange={(e) => handleOnChangeDetail(e.target.value, 'name')} />
+            <Input name='name' />
           </Form.Item>
 
           <Form.Item
@@ -521,7 +513,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <Select name='category' onChange={(value) => handleOnChangeDetail(value, 'category')} value={stateProductDetail.category} >
+            <Select name='category' >
               {categories.map(category => (
                 <Option key={category._id} value={category._id}>
                   {category.name}
@@ -540,7 +532,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <Select name='brand' onChange={(value) => handleOnChangeDetail(value, 'brand')} value={stateProductDetail.brand} >
+            <Select name='brand' >
               {brands.map(brand => (
                 <Option key={brand._id} value={brand._id}>
                   {brand.name}
@@ -553,7 +545,7 @@ const AdminProduct = () => {
             label="Mô tả"
             name="description"
           >
-            <CKEditor editor={ClassicEditor} name='description' data={stateProductDetail.description} onChange={(e, editor) => handleOnChangeDetail(editor.getData(), 'description')} />
+            <CKEditor editor={ClassicEditor} data={descriptionCkDataUpdate} onChange={handleEditorChangeUpdate} name='description' />
           </Form.Item>
 
           <Form.Item
@@ -566,7 +558,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <InputNumber name='price' value={stateProductDetail.price} onChange={(value) => handleOnChangeDetail(value, 'price')} />
+            <InputNumber name='price' />
           </Form.Item>
 
           <Form.Item
@@ -579,7 +571,7 @@ const AdminProduct = () => {
               },
             ]}
           >
-            <InputNumber name='stock' value={stateProductDetail.stock} onChange={(value) => handleOnChangeDetail(value, 'stock')} />
+            <InputNumber name='stock' />
           </Form.Item>
 
           <Form.Item
@@ -589,9 +581,10 @@ const AdminProduct = () => {
             <Upload
               listType="picture-card"
               onPreview={handlePreviewUpdate}
-              onChange={handleOnChangeImageUpdate}
+              customRequest={customRequest}
+              onChange={onChangeUpdate}
               maxCount={1}
-            // fileList={fileListUpdate}
+              fileList={fileListUpdate}
             >
               {uploadButton}
             </Upload>
@@ -614,7 +607,7 @@ const AdminProduct = () => {
               span: 16,
             }}
           >
-            <Button type="primary" htmlType="submit" onClick={onFinishUpdate}>
+            <Button type="primary" htmlType="submit">
               Cập nhật
             </Button>
           </Form.Item>

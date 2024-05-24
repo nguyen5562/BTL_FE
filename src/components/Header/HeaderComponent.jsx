@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Badge, Col, Popover } from "antd";
+import { Badge, Button, Col, Input, Popover } from "antd";
 import { WrapperHeader, WrapperTextHeader, WrapperHeaderAccount, WrapperContentPopup } from "./style";
-import { CaretDownOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import { CaretDownOutlined, SearchOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -64,64 +64,72 @@ const HeaderComponent = () => {
     // Search
     const onSearch = (e) => {
         setSearch(e.target.value)
-        dispatch(searchProduct(e.target.value))
     }
 
+    const handleSearch = () => {
+        dispatch(searchProduct(search))
+        navigate('/')
+    }
+
+    console.log(search)
+
     return (
-        <div>
-            <WrapperHeader>
-                <Col span={5}>
-                    <WrapperTextHeader onClick={() => {
-                        navigate('/')
-                    }}>
-                        MTA Store
-                    </WrapperTextHeader>
-                </Col>
+        <WrapperHeader>
+            <Col span={5}>
+                <WrapperTextHeader onClick={() => {
+                    navigate('/')
+                }}>
+                    MTA Store
+                </WrapperTextHeader>
+            </Col>
 
-                <Col span={13}>
-                    <ButtonInputSearch
-                        size="large"
+            <Col span={13}>
+                <div style={{ display: "flex" }}>
+                    <Input
+                        size='large'
                         placeholder="Tìm sản phẩm"
-                        textbutton="Tìm kiếm"
-                        backgroundcolorinput='#fff'
-                        backgroundcolorbutton='rgb(13, 92, 182)'
-                        colorbutton='#000'
+                        style={{ backgroundColor: '#fff' }}
                         onChange={onSearch}
+                        value={search}
                     />
-                </Col>
+                    <Button
+                        size='large'
+                        style={{ background: 'rgb(13, 92, 182)', border: 'none', color: '#000' }}
+                        icon={<SearchOutlined style={{ color: '#000' }} />}
+                        onClick={handleSearch}
+                    > <span>Tìm kiếm</span> </Button>
+                </div>
+            </Col>
 
-                <Col span={6} style={{ display: 'flex', gap: '20px' }}>
-                    <Loading isLoading={isLoading}>
-                        <WrapperHeaderAccount>
-                            <UserOutlined style={{ fontSize: '30px' }} />
-                            {user?.name ? (
-                                <>
-                                    <Popover content={content} trigger="click" open={isOpenPopup}>
-                                        <div style={{ cursor: 'pointer', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '13px' }} onClick={() => setIsOpenPopup((prev) => !prev)}>Xin chào, {user?.name}</div>
-                                    </Popover>
-                                </>
-                            ) : (
-                                <div onClick={handleNavigateLogin} style={{ cursor: 'pointer' }}>
-                                    <span>Đăng nhập/Đăng kí</span>
-                                    <div>
-                                        <span>Tài khoản</span>
-                                        <CaretDownOutlined />
-                                    </div>
-                                </div>
-                            )}
-                        </WrapperHeaderAccount>
-                    </Loading>
-
+            <Col span={6} style={{ display: 'flex', gap: '20px' }}>
+                <Loading isLoading={isLoading}>
                     <WrapperHeaderAccount>
-                        <Badge count={order?.orderItems?.length} size="small">
-                            <ShoppingCartOutlined onClick={handleCart} style={{ fontSize: '30px', color: '#fff' }} />
-                        </Badge>
-
-                        <div style={{ fontSize: '13px' }}>Giỏ hàng</div>
+                        <UserOutlined style={{ fontSize: '30px' }} />
+                        {user?.name ? (
+                            <Popover content={content} trigger="click" open={isOpenPopup}>
+                                <div style={{ cursor: 'pointer', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '13px' }} onClick={() => setIsOpenPopup((prev) => !prev)}>Xin chào, {user?.name}</div>
+                            </Popover>
+                        ) : (
+                            <div onClick={handleNavigateLogin} style={{ cursor: 'pointer' }}>
+                                <span>Đăng nhập/Đăng kí</span>
+                                <div>
+                                    <span>Tài khoản</span>
+                                    <CaretDownOutlined />
+                                </div>
+                            </div>
+                        )}
                     </WrapperHeaderAccount>
-                </Col>
-            </WrapperHeader>
-        </div >
+                </Loading>
+
+                <WrapperHeaderAccount>
+                    <Badge count={order?.orderItems?.length} size="small">
+                        <ShoppingCartOutlined onClick={handleCart} style={{ fontSize: '30px', color: '#fff' }} />
+                    </Badge>
+
+                    <div style={{ fontSize: '13px' }}>Giỏ hàng</div>
+                </WrapperHeaderAccount>
+            </Col>
+        </WrapperHeader>
     )
 }
 

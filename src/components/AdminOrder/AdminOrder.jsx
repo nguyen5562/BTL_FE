@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { orderService } from '../../services/OrderService';
+import { userService } from '../../services/UserService';
 import { useEffect } from 'react';
 import { Button, Popconfirm, Space, Table, message } from 'antd';
 import Loading from '../Loading/Loading';
@@ -11,7 +12,6 @@ const AdminOrder = () => {
   const [orders, setOders] = useState([]);
   const [isLoading, setLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [id, setId] = useState('')
   const [orderItems, setOrderItems] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
 
@@ -59,12 +59,12 @@ const AdminOrder = () => {
     {
       title: 'STT',
       dataIndex: 'index',
-      key: 'index',
+      key: 'index'
     },
     {
       title: 'Người đặt',
-      dataIndex: 'user',
-      key: 'user',
+      dataIndex: 'userName',
+      key: 'userName'
     },
     {
       title: 'Ngày đặt',
@@ -75,22 +75,22 @@ const AdminOrder = () => {
     {
       title: 'Người nhận',
       dataIndex: 'recipient',
-      key: 'recipient',
+      key: 'recipient'
     },
     {
       title: 'Địa chỉ nhận hàng',
       dataIndex: 'shippingAddress',
-      key: 'shippingAddress',
+      key: 'shippingAddress'
     },
     {
       title: 'Số điện thoại',
       dataIndex: 'phone',
-      key: 'phone',
+      key: 'phone'
     },
     {
       title: 'Phương thức thanh toán',
       dataIndex: 'paymentMethod',
-      key: 'paymentMethod',
+      key: 'paymentMethod'
     },
     {
       title: 'Trạng thái',
@@ -99,7 +99,8 @@ const AdminOrder = () => {
       filters: [
         { text: 'Đã hủy', value: 0 },
         { text: 'Chờ xác nhận', value: 1 },
-        { text: 'Đã giao hàng', value: 2 },
+        { text: 'Chờ giao hàng', value: 2 },
+        { text: 'Đã giao hàng', value: 3 },
       ],
       onFilter: (value, record) => record.status === value,
       render: (status) => {
@@ -109,6 +110,8 @@ const AdminOrder = () => {
           case 1:
             return 'Chờ xác nhận'
           case 2:
+            return 'Chờ giao hàng'
+          case 3:
             return 'Đã giao hàng'
         }
       },
@@ -118,7 +121,7 @@ const AdminOrder = () => {
       dataIndex: 'action',
       key: 'action',
       render: (text, record) => (
-        <Space size="small">
+        <Space size="small" direction='vertical'>
           {record.status === 1 && (
             <>
               <Button type="primary" icon={<EditOutlined />}
@@ -138,6 +141,16 @@ const AdminOrder = () => {
                 Hủy
               </Button>
             </>
+          )}
+          {record.status === 2 && (
+            <Button type="primary" icon={<EditOutlined />}
+              onClick={async () => {
+                await orderService.updateOrder(record.key)
+                  .then(() => fetchOrders())
+              }}
+            >
+              Xác nhận giao hàng
+            </Button>
           )}
           <Button type='primary' color='green' icon={<InfoCircleOutlined />}
             onClick={async () => {

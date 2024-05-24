@@ -12,12 +12,8 @@ const getAllProduct = async ( filterName ) => {
     return res.data
 }
 
-const getAllProductCategory = async (id, filterName) => {
+const getAllProductCategory = async (id) => {
     let url = `${serverConfig.server}/api/product/get-all?filterCategory=${id}`;
-
-    if (filterName && typeof filterName !== 'object') {
-        url += `&filterName=${filterName}`;
-    }
 
     const res = await axios.get(url)
     return res.data

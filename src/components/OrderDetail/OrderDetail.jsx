@@ -1,16 +1,15 @@
 import { Image, Modal, Table } from 'antd'
 import React from 'react'
 import { convertPrice } from '../../utils';
+import { serverConfig } from '../../const/serverConfig';
 
 const OrderDetail = ({ isModalOpen, onClose, orderItems, totalPrice }) => {
-    // const { isModalOpen, orderItems, totalPrice } = props
-
     const columns = [
         {
             title: 'Hình ảnh',
             dataIndex: 'image',
             key: 'image',
-            render: (image) => <Image src={image} width={100} />
+            render: (image) => <Image src={`${serverConfig.server}/uploads/${image}`} width={100} />
         },
         {
             title: 'Tên sản phẩm',
@@ -53,7 +52,7 @@ const OrderDetail = ({ isModalOpen, onClose, orderItems, totalPrice }) => {
                         <strong>Tổng cộng</strong>
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={2}>
-                        <strong>{convertPrice(totalPrice)}</strong>
+                        <strong style={{ color: 'red' }}>{convertPrice(totalPrice)}</strong>
                       </Table.Summary.Cell>
                     </Table.Summary.Row>
                   )}

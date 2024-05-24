@@ -9,6 +9,7 @@ import { convertPrice } from '../../utils'
 import axios from 'axios'
 import { orderService } from '../../services/OrderService'
 import Loading from '../../components/Loading/Loading'
+import { serverConfig } from '../../const/serverConfig'
 
 const OrderPage = () => {
   const order = useSelector((state) => state.order)
@@ -137,11 +138,11 @@ const OrderPage = () => {
     <Loading isLoading={isLoading}>
       {/* {contextHolder} */}
       {order.orderItems.length === 0 ? (
-        <p style={{ fontWeight: 'bold', marginTop: '30px', marginLeft: '120px' }}>Chưa có sản phẩm nào trong giỏ hàng</p>
+        <p style={{ fontWeight: 'bold', marginTop: '30px', marginLeft: '120px', height: '100vh' }}>Chưa có sản phẩm nào trong giỏ hàng</p>
       ) : (
-        <div style={{ background: '#f5f5fa', with: '100%', height: '100vh' }}>
+        <div style={{ background: '#efefef', with: '100%', height: '100vh', paddingBottom: '20px' }}>
           <div style={{ height: '100%', width: '1270px', margin: '0 auto' }}>
-            <h3 style={{ fontWeight: 'bold', fontSize: '20px' }}>Giỏ hàng</h3>
+            <div style={{ fontWeight: 'bold', fontSize: '20px', padding: '20px' }}>Giỏ hàng</div>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <WrapperLeft>
                 <WrapperStyleHeader>
@@ -160,7 +161,7 @@ const OrderPage = () => {
                     return (
                       <WrapperItemOrder>
                         <div style={{ width: '390px', display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <img src={orderItem.image} style={{ width: '77px', height: '79px', objectFit: 'cover' }} />
+                          <img src={`${serverConfig.server}/uploads/${orderItem.image}`} style={{ width: '77px', height: '79px', objectFit: 'cover' }} />
                           <div>
                             <div style={{
                               fontSize: '16px',

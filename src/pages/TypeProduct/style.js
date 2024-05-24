@@ -1,12 +1,11 @@
-import { Col } from "antd";
+import { Col, Row } from "antd";
 import styled from "styled-components";
 
-export const WrapperProducts = styled.div`
+export const WrapperProducts = styled(Row)`
     display: flex;
     gap: 12px;
     margin-top:20px;
     flex-wrap: wrap;
-    margin-top: 20px;
 `
 
 export const WrapperNavbar = styled(Col)`
@@ -17,4 +16,11 @@ export const WrapperNavbar = styled(Col)`
     height: fit-content;
     margin-top : 20px;
     width: 200px;
+`
+
+export const WrapperContent = styled.div`
+    display: flex;
+    //align-items: center;
+    flex-direction: column;
+    gap: 12px;
 `

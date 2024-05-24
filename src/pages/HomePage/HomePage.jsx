@@ -9,7 +9,7 @@ import CardComponent from "../../components/CardComponent/CardComponent";
 import { productService } from "../../services/ProductService";
 import { categoryService } from "../../services/CategoryService";
 import Loading from "../../components/Loading/Loading";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useDebounce } from "../../hooks/useDebounce";
 
 const HomePage = () => {
@@ -40,7 +40,7 @@ const HomePage = () => {
     }, [searchDebounce])
 
     return (
-        <Loading isLoading={isLoading}>
+        <Loading isLoading={isLoading} >
             <div style={{ padding: '0 120px' }}>
                 <WrapperType>
                     {categories.map((category) => {
@@ -51,7 +51,7 @@ const HomePage = () => {
                 </WrapperType>
             </div>
 
-            <div className='body' style={{ width: '100%', backgroundColor: '#efefef', }}>
+            <div className='body' style={{ width: '100%', backgroundColor: '#efefef', paddingBottom: '20px' }}>
                 <div id="container" style={{ padding: '0 120px', height: '100%' }}>
                     <SliderComponent arrImages={[slider1, slider2, slider3]} />
 
@@ -76,7 +76,6 @@ const HomePage = () => {
                     </div>
                 </div>
             </div>
-
         </Loading>
     )
 }

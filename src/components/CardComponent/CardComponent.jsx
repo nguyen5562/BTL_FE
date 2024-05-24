@@ -3,6 +3,7 @@ import { CardName, CardStyle, CardText, PriceDiscount, PriceText } from "./style
 import { StarFilled } from "@ant-design/icons";
 import logo from  '../../assets/images/logo.png'
 import { useNavigate } from "react-router-dom";
+import { serverConfig } from "../../const/serverConfig";
 
 const CardComponent = (props) => {
     const { id, name, stock, description, image, price, category, brand } = props
@@ -16,7 +17,7 @@ const CardComponent = (props) => {
             headStyle={{ width: '200px', height: '200px' }}
             style={{ width: 300 }}
             bodyStyle={{ padding: '10px' }}
-            cover={<img alt="example" src={image} />}
+            cover={<img alt="example" src={`${serverConfig.server}/uploads/${image}`} />}
             onClick={handleDetailProduct}
         >
             <img src={logo} alt="" style={{ width: '102px', height: '21px', position: 'absolute', top: -1, left: -1, borderTopLeftRadius: '3px' }} />
