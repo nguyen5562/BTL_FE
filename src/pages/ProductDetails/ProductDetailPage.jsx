@@ -12,7 +12,7 @@ const ProductDetailPage = () => {
 
   return (
     <div>
-      <div style={{ padding: '0 120px', background: '#efefef', height: 'auto' }}>
+      <div style={{ padding: '0 120px', background: '#efefef', height: 'auto', marginBottom: '20px' }}>
         <div style={{ fontWeight: 'bold', fontSize: '20px', background: '#efefef', padding: '20px' }}>Chi tiết sản phẩm</div>
         <ProductDetailComponent id={id} />
       </div>

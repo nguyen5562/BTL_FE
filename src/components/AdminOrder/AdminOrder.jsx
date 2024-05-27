@@ -182,7 +182,7 @@ const AdminOrder = () => {
           disabled={rowSelectedKeys.length === 0}
           danger
         >
-          Xóa các hãng được chọn
+          Xóa các đơn hàng được chọn
         </Button>
       </Popconfirm>
       <div style={{ marginTop: '20px' }}>

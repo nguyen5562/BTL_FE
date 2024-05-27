@@ -96,9 +96,12 @@ const AdminProduct = () => {
       brand: value.brand,
       image: file
     }
+
+    setIsModalOpen(false)
+    setLoadingProduct(true)
     await productService.createProduct(data)
       .then(() => fetchProducts())
-    setIsModalOpen(false)
+    
     form.resetFields()
     message.success("Thêm thành công")
   }
@@ -113,7 +116,10 @@ const AdminProduct = () => {
       brand: value.brand,
       image: file
     }
+    
     setIsModalOpenUpdate(false)
+    setLoadingProduct(true)
+
     await productService.updateProduct(value.id, data)
       .then(() => fetchProducts())
     message.success("Cập nhật thành công")

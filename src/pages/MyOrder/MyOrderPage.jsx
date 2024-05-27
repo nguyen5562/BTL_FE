@@ -20,11 +20,11 @@ const MyOrderPage = () => {
     setIsLoading(false)
   }
 
+  console.log(user.id)
+
   useEffect(() => {
     fetchOrder()
   }, [])
-
-  console.log(orders)
 
   const handleCanceOrder = async (id) => {
     await orderService.cancelOrder(id)
@@ -68,7 +68,7 @@ const MyOrderPage = () => {
           <div>{order?.name}</div>
           <div style={{ marginTop: '15px', color: 'gray' }}>SL: x{order.quantity}</div>
         </div>
-        <span style={{ fontSize: '16px', color: '#242424', marginLeft: 'auto' }}>{convertPrice(order?.price)}</span>
+        <span style={{ fontSize: '16px', color: '#242424', marginLeft: 'auto' }}>{convertPrice(order?.totalPrice)}</span>
       </WrapperHeaderItem>
     })
   }

@@ -4,6 +4,7 @@ import { StarFilled } from "@ant-design/icons";
 import logo from  '../../assets/images/logo.png'
 import { useNavigate } from "react-router-dom";
 import { serverConfig } from "../../const/serverConfig";
+import { convertPrice } from '../../utils'
 
 const CardComponent = (props) => {
     const { id, name, stock, description, image, price, category, brand } = props
@@ -30,7 +31,7 @@ const CardComponent = (props) => {
                 <span> | Da ban 1000+</span>
             </CardText>
             <PriceText>
-                <span style={{ marginRight: '8px' }}>{price}đ</span>
+                <span style={{ marginRight: '8px' }}>{convertPrice(price)}</span>
                 <PriceDiscount> -5%</PriceDiscount>
             </PriceText>
         </CardStyle>

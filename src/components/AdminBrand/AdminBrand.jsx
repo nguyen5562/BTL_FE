@@ -52,7 +52,6 @@ const AdminBrand = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false)
-    form.resetFields()
   }
 
   const handleCancelUpdate = () => {
@@ -63,6 +62,7 @@ const AdminBrand = () => {
     await brandService.createBrand(stateBrand)
       .then(() => fetchBrands())
     setIsModalOpen(false)
+    form.resetFields()
     message.success("Thêm thành công")
   }
 
@@ -70,6 +70,7 @@ const AdminBrand = () => {
     await brandService.updateBrand(id, stateBrandDetail)
       .then(() => fetchBrands())
     setIsModalOpenUpdate(false)
+    formUpdate.resetFields()
     message.success("Sửa thành công")
   }
 

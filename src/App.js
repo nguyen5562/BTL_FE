@@ -57,8 +57,6 @@ function App() {
     return Promise.reject(err)
   })
 
-  const router = createBrowserRouter(routes)
-
   return (
     <div>
       <Loading isLoading={isLoading}>

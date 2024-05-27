@@ -65,7 +65,7 @@ const TypeProductPage = () => {
         setIsLoading(true)
         let data = products
 
-        if (filterPrice.priceMin !== 0 && filterPrice.priceMax !== 0) {
+        if (filterPrice.priceMin !== 0 || filterPrice.priceMax !== 0) {
             data = data.filter(product => product.price >= filterPrice.priceMin && product.price <= filterPrice.priceMax)
         }
 
@@ -107,8 +107,8 @@ const TypeProductPage = () => {
 
     return (
         <Loading isLoading={isLoading}>
-            <div style={{ background: '#efefef', height: 'calc(100vh - 64px)', width: '100%' }}>
-                <div style={{ width: '1270px', margin: '0 auto', height: '100%' }}>
+            <div style={{ background: '#efefef', height: 'auto', width: '100%' }}>
+                <div style={{ width: '1270px', margin: '0 auto', height: 'auto' }}>
                     <Row style={{ flexWrap: 'nowrap', paddingTop: '10px', height: 'calc(100% - 20px)' }}>
                         <WrapperNavbar span={4}>
                             <div style={{ backgroundColor: 'white' }}>
@@ -156,7 +156,7 @@ const TypeProductPage = () => {
                             </div>
                         </WrapperNavbar>
 
-                        <Col span={20} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }} >
+                        <Col span={20} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', marginBottom: '20px' }} >
                             <WrapperProducts style={{ marginLeft: '40px' }}>
                                 {filterProducts.length === 0 ? ( // Kiểm tra nếu không có sản phẩm
                                     <p>Không có sản phẩm nào được tìm thấy.</p>

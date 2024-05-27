@@ -90,7 +90,7 @@ const ProductDetailComponent = ({ id }) => {
   }
 
   return (
-    <>
+    <div style={{ paddingBottom: '20px' }}>
       <Row style={{ padding: '16px', height: 'auto' }}>
         <Col span={12} style={{ background: '#fff', borderRadius: '10px' }} >
           <Image style={{ borderRadius: '10px' }} src={`${serverConfig.server}/uploads/${stateProductDetail.image}`} alt='image product' preview={false} />
@@ -139,10 +139,10 @@ const ProductDetailComponent = ({ id }) => {
         </Col>
       </Row>
       <Row style={{ padding: '16px', margin: '16px', height: 'auto', background: '#fff', borderRadius: '10px' }}>
+          <h2>Mô tả sản phẩm</h2>
           {renderDescription(stateProductDetail.description)}
       </Row>
-    </>
-
+    </div>
   )
 }
 

@@ -61,23 +61,21 @@ const FooterComponent = () => {
                         </p>
                     </div>
                     <div class="block">
-                        <h4 class="styles__FooterHeading-sc-32ws10-4 fdMvyN">Về Tiki</h4>
-                        <a rel="noreferrer" href="https://tiki.vn/thong-tin/gioi-thieu-ve-tiki" class="small-text" target="_blank">Giới thiệu Tiki</a>
-                        <a rel="noreferrer" href="https://tiki.vn/blog/" class="small-text" target="_blank">Tiki Blog</a>
+                        <h4 class="styles__FooterHeading-sc-32ws10-4 fdMvyN">Về MTA Store</h4>
+                        <a rel="noreferrer" href="https://tiki.vn/thong-tin/gioi-thieu-ve-tiki" class="small-text" target="_blank">Giới thiệu MTA Store</a>
+                        <a rel="noreferrer" href="https://tiki.vn/blog/" class="small-text" target="_blank">MTA Store Blog</a>
                         <a rel="nofollow noreferrer" href="https://tuyendung.tiki.vn/" class="small-text" target="_blank">Tuyển dụng</a>
                         <a rel="noreferrer" href="https://tiki.vn/bao-mat-thanh-toan" class="small-text" target="_blank">Chính sách bảo mật thanh toán</a>
                         <a rel="noreferrer" href="https://tiki.vn/bao-mat-thong-tin-ca-nhan" class="small-text" target="_blank">Chính sách bảo mật thông tin cá nhân</a>
                         <a rel="nofollow noreferrer" href="https://hotro.tiki.vn/s/article/chinh-sach-giai-quyet-khieu-nai" class="small-text" target="_blank">Chính sách giải quyết khiếu nại</a>
                         <a rel="nofollow noreferrer" href="https://hotro.tiki.vn/s/article/dieu-khoan-su-dung" class="small-text" target="_blank">Điều khoản sử dụng</a>
-                        <a rel="nofollow noreferrer" href="https://hotro.tiki.vn/s/article/tiki-xu-la-gi" class="small-text" target="_blank">Giới thiệu Tiki Xu</a>
-                        <a rel="noreferrer" href="https://tiki.vn/khuyen-mai/tiki-tiep-thi-lien-ket" class="small-text" target="_blank">Tiếp thị liên kết cùng Tiki</a>
                         <a rel="noreferrer" href="https://tiki.vn/khuyen-mai/ban-hang-doanh-nghiep" class="small-text" target="_blank">Bán hàng doanh nghiệp</a>
                         <a rel="nofollow noreferrer" href="https://www.tikinow.biz/%C4%91i%E1%BB%81u-kho%E1%BA%A3n-v%E1%BA%ADn-chuy%E1%BB%83n" class="small-text" target="_blank">Điều kiện vận chuyển</a>
                     </div>
                     <div class="block">
                         <h4 class="styles__FooterHeading-sc-32ws10-4 fdMvyN">Hợp tác và liên kết</h4>
                         <a rel="noreferrer" href="https://tiki.vn/quy-che-hoat-dong-sgdtmdt" class="small-text" target="_blank">Quy chế hoạt động Sàn GDTMĐT</a>
-                        <a rel="noreferrer" href="https://tiki.vn/khuyen-mai/ban-hang-cung-tiki" class="small-text" target="_blank">Bán hàng cùng Tiki</a>
+                        <a rel="noreferrer" href="https://tiki.vn/khuyen-mai/ban-hang-cung-tiki" class="small-text" target="_blank">Bán hàng cùng MTA Store</a>
                         <h4 style={{ marginTop: '24px' }} class="styles__FooterHeading-sc-32ws10-4 fdMvyN">Chứng nhận bởi</h4>
                         <div class="flex">
                             <a href="https://hotro.tiki.vn/s/" rel="nofollow noreferrer" aria-label="" target="_blank" style={{ height: '32px' }}>

@@ -63,7 +63,6 @@ const AdminCategory = () => {
 
   const handleCancel = () => {
     setIsModalOpen(false)
-    form.resetFields()
   }
 
   const handleCancelUpdate = () => {
@@ -74,6 +73,7 @@ const AdminCategory = () => {
     await categoryService.createCategory(stateCategory)
       .then(() => fetchCategories())
     setIsModalOpen(false)
+    form.resetFields()
     message.success("Thêm thành công")
   }
 
@@ -81,6 +81,7 @@ const AdminCategory = () => {
     await categoryService.updateCategory(id, stateCategoryDetail)
       .then(() => fetchCategories())
     setIsModalOpenUpdate(false)
+    formUpdate.resetFields()
     message.success("Sửa thành công")
   }
 
