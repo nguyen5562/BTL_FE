@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, createBrowserRouter } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { routes } from "./routes";
 import DefaultComponent from "./components/Default/DefaultComponent";
 import { useDispatch, useSelector } from "react-redux";
@@ -63,6 +63,10 @@ function App() {
         <Router>
           <Routes>
             {routes.map((route) => {
+              const checkAuth = !route.isPrivate || user.isAdmin
+              if (!checkAuth) {
+                return null; // Do not render the route if checkAuth is false
+              }
               const Layout = route.isShowHeader ? DefaultComponent : Fragment
               return (
                 <Route key={route.path} path={route.path} element={

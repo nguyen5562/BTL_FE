@@ -1,15 +1,16 @@
-import { Button, Form, Input, InputNumber, Modal, Select, message } from 'antd'
+import { Button, Form, Image, Input, InputNumber, Modal, Radio, Select, message } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { WrapperCountOrder, WrapperInfo, WrapperItemOrder, WrapperLeft, WrapperListOrder, WrapperRight, WrapperStyleHeader, WrapperTotal } from './style'
+import { WrapperCountOrder, WrapperInfo, WrapperItemOrder, WrapperLeft, WrapperListOrder, WrapperRight, WrapperStyleHeader, WrapperTotal, Lable, WrapperRadio } from './style'
 import { DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import ButtonComponent from '../../components/ButtonComponent/ButtonComponent'
 import { useDispatch, useSelector } from 'react-redux'
 import { decreaseQuantity, increaseQuantity, removeAllOrderProduct, removeOrderProduct, setQuantity } from '../../redux/slides/orderSlide'
-import { convertPrice } from '../../utils'
+import { convertPrice, convertUSD } from '../../utils'
 import axios from 'axios'
 import { orderService } from '../../services/OrderService'
 import Loading from '../../components/Loading/Loading'
 import { serverConfig } from '../../const/serverConfig'
+import { PayPalButtons } from '@paypal/react-paypal-js'
 
 const OrderPage = () => {
   const order = useSelector((state) => state.order)
@@ -40,7 +41,7 @@ const OrderPage = () => {
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [name, setName] = useState(' Khôi Nguyên')
+  const [name, setName] = useState('Khôi Nguyên')
   const [phone, setPhone] = useState('0354866976')
   const [province, setProvince] = useState('Thái Bình')
   const [district, setDistrict] = useState('huyện Đông Hưng')
@@ -128,11 +129,46 @@ const OrderPage = () => {
         }
       })
     }
-    const res = await orderService.createOrder(data)
+    await orderService.createOrder(data)
       .then(() => dispatch(removeAllOrderProduct()))
     setIsLoading(false)
     message.success("Mua hàng thành công")
   }
+
+  const handleAddOrderPaypal = async () => {
+    setIsLoading(true)
+    let shippingAddress = `${address}, ${ward}, ${district}, ${province}`
+    let data = {
+      shippingAddress: shippingAddress,
+      recipient: name,
+      phone: phone,
+      orderDate: Date.now(),
+      paymentMethod: 'Thanh toan qua paypal',
+      status: 1,
+      totalPrice: totalPrice(),
+      user: user.id,
+      orderItems: order.orderItems.map(item => {
+        return {
+          product: item.product,
+          name: item.name,
+          image: item.image,
+          quantity: item.quantity,
+          price: item.price,
+          totalPrice: item.price * item.quantity
+        }
+      })
+    }
+    await orderService.createOrder(data)
+      .then(() => dispatch(removeAllOrderProduct()))
+    setIsLoading(false)
+    message.success("Mua hàng thành công")
+  }
+
+  const [paymentMethod, setPaymentMethod] = useState("later_money");
+
+  const handlePaymentChange = (e) => {
+    setPaymentMethod(e.target.value);
+  };
 
   return (
     <Loading isLoading={isLoading}>
@@ -140,7 +176,7 @@ const OrderPage = () => {
       {order.orderItems.length === 0 ? (
         <p style={{ fontWeight: 'bold', marginTop: '30px', marginLeft: '120px', height: '100vh' }}>Chưa có sản phẩm nào trong giỏ hàng</p>
       ) : (
-        <div style={{ background: '#efefef', with: '100%', height: '100vh', paddingBottom: '20px' }}>
+        <div style={{ background: '#efefef', with: '100%', height: 'auto', paddingBottom: '20px' }}>
           <div style={{ height: '100%', width: '1270px', margin: '0 auto' }}>
             <div style={{ fontWeight: 'bold', fontSize: '20px', padding: '20px' }}>Giỏ hàng</div>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -161,7 +197,7 @@ const OrderPage = () => {
                     return (
                       <WrapperItemOrder>
                         <div style={{ width: '390px', display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <img src={`${serverConfig.server}/uploads/${orderItem.image}`} style={{ width: '77px', height: '79px', objectFit: 'cover' }} />
+                          <Image src={`${serverConfig.server}/uploads/${orderItem.image}`} style={{ width: '77px', height: '79px', objectFit: 'cover' }} />
                           <div>
                             <div style={{
                               fontSize: '16px',
@@ -208,6 +244,17 @@ const OrderPage = () => {
                       <span style={{ color: 'rgb(128, 128, 137)', fontWeight: 'normal' }}>{address}, {ward}, {district}, {province}</span>
                     </div>
                   </WrapperInfo>
+
+                  <WrapperInfo>
+                    <Lable>Chọn phương thức thanh toán</Lable>
+                    <WrapperRadio
+                      onChange={handlePaymentChange} value={paymentMethod}
+                    >
+                      <Radio value="later_money"> Thanh toán khi nhận hàng</Radio>
+                      <Radio value="paypal"> Thanh toán bằng paypal</Radio>
+                    </WrapperRadio>
+                  </WrapperInfo>
+
                   <br />
                   <WrapperTotal>
                     <span>Tổng tiền</span>
@@ -216,19 +263,64 @@ const OrderPage = () => {
                     </span>
                   </WrapperTotal>
                 </div>
-                <ButtonComponent
-                  onClick={() => handleAddOrder()}
-                  size={40}
-                  styleButton={{
-                    background: 'rgb(255, 57, 69)',
-                    height: '48px',
-                    width: '320px',
-                    border: 'none',
-                    borderRadius: '4px'
-                  }}
-                  textbutton={'Mua hàng'}
-                  styleTextButton={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
-                ></ButtonComponent>
+
+                {paymentMethod === 'later_money' && (
+                  <ButtonComponent
+                    onClick={() => handleAddOrder()}
+                    size={40}
+                    styleButton={{
+                      background: 'rgb(255, 57, 69)',
+                      height: '48px',
+                      width: '320px',
+                      border: 'none',
+                      borderRadius: '4px'
+                    }}
+                    textbutton={'Mua hàng'}
+                    styleText={{ color: 'white', fontSize: '15px', fontWeight: '700' }}
+                  ></ButtonComponent>
+                )}
+
+                {paymentMethod === 'paypal' && (
+                  <div style={{ width: '320px' }}>
+                    <PayPalButtons
+                      createOrder={(data, actions) => {
+                        return actions.order.create({
+                          purchase_units: [{
+                            amount: {
+                              value: convertUSD(totalPrice()),  // Số tiền thanh toán
+                              breakdown: {
+                                item_total: {
+                                  currency_code: "USD",
+                                  value: convertUSD(totalPrice()) // Số tiền thanh toán chuyển đổi sang USD
+                                }
+                              }
+                            },
+                            items: order.orderItems.map(item => ({
+                              name: item.name,
+                              unit_amount: {
+                                currency_code: "USD",
+                                value: convertUSD(item.price) // Giá sản phẩm chuyển đổi sang USD
+                              },
+                              quantity: item.quantity
+                            }))
+                          }]
+                        });
+                      }}
+                      onApprove={(data, actions) => {
+                        return actions.order.capture().then((details) => {
+                          alert('Transaction completed by ' + details.payer.name.given_name);
+                          // Gọi hàm xử lý thanh toán thành công
+                          handleAddOrderPaypal()
+                        });
+                      }}
+                      onError={(err) => {
+                        console.error('PayPal Checkout onError', err);
+                        // Xử lý khi có lỗi xảy ra
+                      }}
+                    />
+                  </div>
+                )}
+
               </WrapperRight>
             </div>
           </div>
