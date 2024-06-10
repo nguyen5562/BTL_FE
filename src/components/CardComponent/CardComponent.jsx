@@ -7,7 +7,7 @@ import { serverConfig } from "../../const/serverConfig";
 import { convertPrice } from '../../utils'
 
 const CardComponent = (props) => {
-    const { id, name, stock, description, image, price, category, brand } = props
+    const { id, name, stock, description, image, price, category, brand, sold } = props
     const navigate = useNavigate()
     const handleDetailProduct = () => {
         navigate(`/product-detail/${id}`)
@@ -26,9 +26,9 @@ const CardComponent = (props) => {
             <CardText>
                 <span style={{ marginRight: '4px' }}>
                     <span>4.96 </span> <StarFilled style={{ color: 'yellow', fontSize: '12px' }} />&nbsp;
-                </span>
+                </span> 
                 
-                <span> | Da ban 1000+</span>
+                <span> | Đã bán {sold}</span>
             </CardText>
             <PriceText>
                 <span style={{ marginRight: '8px' }}>{convertPrice(price)}</span>

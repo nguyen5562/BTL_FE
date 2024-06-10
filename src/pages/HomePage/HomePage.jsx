@@ -11,6 +11,7 @@ import { categoryService } from "../../services/CategoryService";
 import Loading from "../../components/Loading/Loading";
 import { useSelector } from "react-redux";
 import { useDebounce } from "../../hooks/useDebounce";
+import { Carousel } from "antd";
 
 const HomePage = () => {
     const searchProduct = useSelector((state) => state?.product?.search)
@@ -39,6 +40,11 @@ const HomePage = () => {
         fetchProductAll()
     }, [searchDebounce])
 
+    const chunkedProducts = [];
+    for (let i = 0; i < products.length; i += 4) {
+        chunkedProducts.push(products.slice(i, i + 4));
+    }
+
     return (
         <Loading isLoading={isLoading} >
             <div style={{ padding: '0 120px' }}>
@@ -55,25 +61,36 @@ const HomePage = () => {
                 <div id="container" style={{ padding: '0 120px', height: '100%' }}>
                     <SliderComponent arrImages={[slider1, slider2, slider3]} />
 
-                    <div style={{ marginTop: '20px', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-                        {products.length === 0 ? ( // Kiểm tra nếu không có sản phẩm
-                            <p>Không có sản phẩm nào được tìm thấy.</p>
-                        ) : (
-                            // Hiển thị danh sách sản phẩm
-                            products.map((product) => (
-                                <CardComponent
-                                    id={product._id}
-                                    name={product.name}
-                                    stock={product.stock}
-                                    description={product.description}
-                                    image={product.image}
-                                    price={product.price}
-                                    category={product.category}
-                                    brand={product.brand}
-                                />
-                            ))
-                        )}
-                    </div>
+                    {products.length === 0 ? (
+                        <p style={{ marginTop: '40px', fontSize: '20px', display: 'flex', justifyContent: 'center' }}>Không tìm thấy sản phẩm nào</p>
+                    ) : (
+                        <div>
+                            <p style={{ marginTop: '40px', fontSize: '20px', display: 'flex', justifyContent: 'center' }}>Danh sách sản phẩm</p>
+                            <Carousel>
+                                {chunkedProducts.map((chunk, index) => (
+                                    <div key={index}>
+                                        <div style={{ marginBottom: '20px', marginTop: '20px', display: 'flex', gap: '24px', flexWrap: 'wrap', fontWeight: '600' }}>
+                                            {chunk.map((product) => (
+                                                <CardComponent
+                                                    key={product._id}
+                                                    id={product._id}
+                                                    name={product.name}
+                                                    stock={product.stock}
+                                                    description={product.description}
+                                                    image={product.image}
+                                                    price={product.price}
+                                                    sold={product.sold}
+                                                    category={product.category}
+                                                    brand={product.brand}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </Carousel>
+                        </div>
+                    )}
+
                 </div>
             </div>
         </Loading>

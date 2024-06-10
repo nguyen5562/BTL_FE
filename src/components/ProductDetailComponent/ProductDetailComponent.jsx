@@ -18,6 +18,7 @@ const ProductDetailComponent = ({ id }) => {
     category: '',
     brand: '',
     stock: '',
+    sold: '',
     price: '',
     image: ''
   })
@@ -31,6 +32,7 @@ const ProductDetailComponent = ({ id }) => {
       category: res.data.category,
       brand: res.data.brand,
       stock: res.data.stock,
+      sold: res.data.sold,
       price: res.data.price,
       image: res.data.image
     })
@@ -99,11 +101,11 @@ const ProductDetailComponent = ({ id }) => {
         <Col span={11} offset={1} style={{ background: '#fff', borderRadius: '10px', padding: '10px' }}>
           <WrapperProductName>{stateProductDetail.name}</WrapperProductName>
 
-          {/* <div>
+          <div>
             <Rating name="half-rating" defaultValue={2.5} precision={0.1} readOnly style={{ fontSize: '20px' }} />
 
-            <span style={{ fontSize: '20px', lineHeight: '24px', color: 'rgb(120, 120, 120)' }}> | Đã bán 100+</span>
-          </div> */}
+            <span style={{ fontSize: '20px', lineHeight: '24px', color: 'rgb(120, 120, 120)' }}> | Đã bán {stateProductDetail.sold}</span>
+          </div>
 
           <div style={{ borderRadius: '4px' }}>
             <h1 style={{ fontSize: '32px', lineHeight: '40px', marginRight: '8px', fontWeight: '500' }}>{convertPrice(stateProductDetail.price)}</h1>

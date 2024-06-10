@@ -12,6 +12,7 @@ import Loading from '../../components/Loading/Loading'
 import { jwtDecode } from 'jwt-decode';
 import { useDispatch } from 'react-redux'
 import { updateUser } from '../../redux/slides/userSlide'
+import { GoogleLogin } from '@react-oauth/google'
 
 const SignInPage = () => {
   const [isShowPass, setIsShowPass] = useState(false)
@@ -82,6 +83,14 @@ const SignInPage = () => {
     })
   }
 
+  const onSuccess = (res) => {
+    console.log(res)
+  }
+
+  const onError = (res) => {
+    console.log(res)
+  }
+
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0, 0, 0, 0.53)', height: '100vh' }}>
       <div style={{ width: '800px', height: '445px', borderRadius: '6px', background: '#fff', display: 'flex' }}>
@@ -131,6 +140,8 @@ const SignInPage = () => {
               textbutton={'Đăng nhập'}
               styleText={{ color: '#fff', fontSize: '15px', fontWeight: '700' }}
             ></ButtonComponent>
+
+            {/* <GoogleLogin size='large' onSuccess={onSuccess} onError={onError} /> */}
           </Loading>
 
           <p><WrapperTextLight>Quên mật khẩu?</WrapperTextLight></p>

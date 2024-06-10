@@ -110,7 +110,7 @@ const TypeProductPage = () => {
             <div style={{ background: '#efefef', height: 'auto', width: '100%' }}>
                 <div style={{ width: '1270px', margin: '0 auto', height: 'auto' }}>
                     <Row style={{ flexWrap: 'nowrap', paddingTop: '10px', height: 'calc(100% - 20px)' }}>
-                        <WrapperNavbar span={4}>
+                        <WrapperNavbar span={4} style={{ marginBottom: '20px' }}>
                             <div style={{ backgroundColor: 'white' }}>
                                 <div style={{ display: 'flex', justifyContent: 'center', fontSize: '16px', fontWeight: 'bold' }}>Lọc sản phẩm</div>
 

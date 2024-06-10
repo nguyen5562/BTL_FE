@@ -118,6 +118,7 @@ const OrderPage = () => {
       status: 1,
       totalPrice: totalPrice(),
       user: user.id,
+      email: user.email,
       orderItems: order.orderItems.map(item => {
         return {
           product: item.product,
@@ -147,6 +148,7 @@ const OrderPage = () => {
       status: 1,
       totalPrice: totalPrice(),
       user: user.id,
+      email: user.email,
       orderItems: order.orderItems.map(item => {
         return {
           product: item.product,

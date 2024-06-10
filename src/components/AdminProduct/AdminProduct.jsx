@@ -71,8 +71,10 @@ const AdminProduct = () => {
   const { Option } = Select;
   const [form] = Form.useForm();
   const [formUpdate] = Form.useForm();
+  const [formAdd] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenUpdate, setIsModalOpenUpdate] = useState(false);
+  const [isModalOpenAdd, setIsModalOpenAdd] = useState(false);
 
   const handleCancel = () => {
     setIsModalOpen(false)
@@ -84,6 +86,11 @@ const AdminProduct = () => {
 
   const handleCancelUpdate = () => {
     setIsModalOpenUpdate(false)
+  }
+
+  const handleCancelAdd = () => {
+    setIsModalOpenAdd(false)
+    form.resetFields()
   }
 
   const onFinish = async (value) => {
@@ -123,6 +130,10 @@ const AdminProduct = () => {
     await productService.updateProduct(value.id, data)
       .then(() => fetchProducts())
     message.success("Cập nhật thành công")
+  }
+
+  const onFinishAdd = async (value) => {
+    console.log(value)
   }
 
   const [rowSelectedKeys, setRowSelectedKeys] = useState([])
@@ -273,7 +284,7 @@ const AdminProduct = () => {
       dataIndex: 'action',
       key: 'action',
       render: (text, record) => (
-        <Space size="middle">
+        <Space size="small" direction='vertical'>
           <Button type="primary" icon={<EditOutlined />}
             onClick={async () => {
               const res = await productService.getProduct(record.key)
@@ -303,6 +314,14 @@ const AdminProduct = () => {
             }}
           >
             Sửa
+          </Button>
+
+          <Button type="primary" icon={<PlusOutlined />}
+            onClick={async () => {
+              setIsModalOpenAdd(true)
+            }}
+          >
+            Thêm số lượng
           </Button>
         </Space>
       )
@@ -615,6 +634,41 @@ const AdminProduct = () => {
           >
             <Button type="primary" htmlType="submit">
               Cập nhật
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal title='Thêm số lượng' open={isModalOpenAdd} onCancel={handleCancelAdd} width={400} footer={null} style={{ top: '200px' }} >
+        <Form
+          name="basic"
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 18 }}
+          onFinish={onFinishAdd}
+          autoComplete="off"
+          form={formAdd}
+        >
+          <Form.Item
+            label="Số lượng"
+            name="value"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy nhập số lượng!',
+              },
+            ]}
+          >
+            <InputNumber min={0} name='value' />
+          </Form.Item>
+
+          <Form.Item
+            wrapperCol={{
+              offset: 8,
+              span: 16,
+            }}
+          >
+            <Button type="primary" htmlType="submit">
+              Thêm
             </Button>
           </Form.Item>
         </Form>

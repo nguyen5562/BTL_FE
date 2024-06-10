@@ -2,6 +2,7 @@ import { Image } from "antd";
 import React from "react";
 import Slider from "react-slick";
 import Arrow from "./SliderArrow";
+import './style.css'
 
 const SliderComponent = ({arrImages}) => {
     const settings = {
