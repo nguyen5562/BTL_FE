@@ -107,7 +107,7 @@ const HeaderComponent = () => {
                         <UserOutlined style={{ fontSize: '30px' }} />
                         {user?.name ? (
                             <Popover content={content} trigger="click" open={isOpenPopup}>
-                                <div style={{ cursor: 'pointer', maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '13px' }} onClick={() => setIsOpenPopup((prev) => !prev)}>Xin chào, {user?.name}</div>
+                                <div style={{ cursor: 'pointer', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '13px' }} onClick={() => setIsOpenPopup((prev) => !prev)}>Xin chào, {user?.name}</div>
                             </Popover>
                         ) : (
                             <div onClick={handleNavigateLogin} style={{ cursor: 'pointer' }}>
